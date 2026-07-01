@@ -1,0 +1,12 @@
+{
+  "_comment": "Expected years-of-experience range per job seniority label, used by the Experience sub-score. A candidate inside the band scores highest; scores taper off outside it rather than hard-cutting, since being a bit over- or under-qualified isn't disqualifying.",
+  "Entry": [0, 2],
+  "Junior": [0, 3],
+  "Mid": [2, 6],
+  "Mid-Senior": [3, 8],
+  "Senior": [5, 12],
+  "Lead": [7, 15],
+  "Principal": [8, 18],
+  "Staff": [8, 18],
+  "_default": [2, 10]
+}
