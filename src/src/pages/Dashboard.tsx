@@ -3,11 +3,14 @@ import { api } from '../api/client'
 import type { DashboardData } from '../types'
 import { KpiCard } from '../components/KpiCard'
 import { RecommendationBadge } from '../components/RecommendationBadge'
+import { CandidateDrawer } from '../components/CandidateDrawer'
+import { useCandidateDrawer } from '../hooks/useCandidateDrawer'
 import { Award, Calendar, Sparkles, ThumbsDown, TrendingUp, Trophy, Users, Wrench } from 'lucide-react'
 
 export function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const drawer = useCandidateDrawer()
 
   useEffect(() => {
     api.dashboard().then(setData).catch((e) => setError(String(e)))
@@ -71,7 +74,11 @@ export function Dashboard() {
           </thead>
           <tbody>
             {data.top_candidates.map((c) => (
-              <tr key={c.full_name} className="border-b border-neutral-50 last:border-0 dark:border-neutral-800/60">
+              <tr
+                key={c.hubspot_id}
+                onClick={() => drawer.open(c.hubspot_id)}
+                className="cursor-pointer border-b border-neutral-50 last:border-0 hover:bg-neutral-50 dark:border-neutral-800/60 dark:hover:bg-neutral-800/40"
+              >
                 <td className="py-2.5 font-medium text-neutral-900 dark:text-neutral-100">{c.full_name}</td>
                 <td className="py-2.5 text-neutral-600 dark:text-neutral-400">{c.best_matching_job}</td>
                 <td className="py-2.5 font-semibold text-neutral-900 dark:text-neutral-100">{c.overall_score}</td>
@@ -83,6 +90,8 @@ export function Dashboard() {
           </tbody>
         </table>
       </div>
+
+      {drawer.selected && <CandidateDrawer result={drawer.selected} onClose={drawer.close} />}
     </div>
   )
 }

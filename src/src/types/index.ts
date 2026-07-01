@@ -97,6 +97,7 @@ export interface DashboardData {
   most_requested_skill: string | null
   recommendation_counts: Record<string, number>
   top_candidates: {
+    hubspot_id: string
     full_name: string
     overall_score: number
     recommendation: string

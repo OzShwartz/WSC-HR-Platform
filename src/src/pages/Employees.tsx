@@ -4,6 +4,8 @@ import type { Employee } from '../types'
 import { Search, FileSpreadsheet, Download, Upload, Users, ChevronDown } from 'lucide-react'
 import { MultiSelectDropdown } from '../components/MultiSelectDropdown'
 import { RecommendationBadge } from '../components/RecommendationBadge'
+import { CandidateDrawer } from '../components/CandidateDrawer'
+import { useCandidateDrawer } from '../hooks/useCandidateDrawer'
 
 function toCsv(employees: Employee[]): string {
   const header = 'employee_id,full_name,title,department,linkedin_id,work_history'
@@ -24,6 +26,7 @@ export function Employees() {
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const fileInputRef = useRef<HTMLInputElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
+  const drawer = useCandidateDrawer()
 
   function toggleExpanded(employeeId: string) {
     setExpanded((prev) => {
@@ -167,7 +170,7 @@ export function Employees() {
           <h2 className="mb-2 text-xs font-bold uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
             {department} &middot; {members.length}
           </h2>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 items-start gap-3 md:grid-cols-2 lg:grid-cols-3">
             {members.map((e) => {
               const isOpen = expanded.has(e.employee_id)
               const hasConnections = e.connected_candidates.length > 0
@@ -201,14 +204,19 @@ export function Employees() {
                   </button>
 
                   {isOpen && hasConnections && (
-                    <div className="mt-2 flex flex-col gap-1.5 border-t border-neutral-100 pt-2 dark:border-neutral-800">
+                    <div className="mt-2 flex flex-col gap-1 border-t border-neutral-100 pt-2 dark:border-neutral-800">
                       {e.connected_candidates.map((c) => (
-                        <div key={c.hubspot_id} className="flex items-center justify-between text-xs">
+                        <button
+                          key={c.hubspot_id}
+                          onClick={() => drawer.open(c.hubspot_id)}
+                          disabled={drawer.loadingId === c.hubspot_id}
+                          className="flex items-center justify-between rounded px-1.5 py-1 text-left text-xs hover:bg-neutral-50 disabled:opacity-50 dark:hover:bg-neutral-800/60"
+                        >
                           <span className="text-neutral-700 dark:text-neutral-300">
                             {c.full_name} <span className="text-neutral-400 dark:text-neutral-500">- {c.best_matching_job}</span>
                           </span>
                           <RecommendationBadge recommendation={c.recommendation} />
-                        </div>
+                        </button>
                       ))}
                     </div>
                   )}
@@ -218,6 +226,8 @@ export function Employees() {
           </div>
         </div>
       ))}
+
+      {drawer.selected && <CandidateDrawer result={drawer.selected} onClose={drawer.close} />}
     </div>
   )
 }

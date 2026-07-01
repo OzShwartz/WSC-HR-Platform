@@ -37,6 +37,7 @@ export const api = {
   createJob: (draft: JobDraft) => sendJson<Job>('/jobs', 'POST', draft),
   deleteJob: (jobId: string) => sendJson<{ deleted: string }>(`/jobs/${jobId}`, 'DELETE'),
   candidatePool: () => getJson<ScoredCandidate[]>('/candidates'),
+  candidate: (hubspotId: string) => getJson<ScoredCandidate>(`/candidates/${hubspotId}`),
   dashboard: () => getJson<DashboardData>('/dashboard'),
   employees: () => getJson<Employee[]>('/employees'),
   importEmployees: async (file: File) => {

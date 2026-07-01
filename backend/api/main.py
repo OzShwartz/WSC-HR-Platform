@@ -153,6 +153,18 @@ def list_candidate_pool():
     return list(best_by_candidate.values())
 
 
+@app.get("/api/candidates/{hubspot_id}")
+def get_candidate(hubspot_id: str):
+    """A single candidate's full profile (scored against their best-matching job) -
+    used to open the Candidate Drawer from anywhere that only has a hubspot_id handy
+    (Dashboard's top candidates, WSC Team's reverse connection view), without those
+    pages having to load the entire pool up front."""
+    for entry in list_candidate_pool():
+        if entry["candidate"]["hubspot_id"] == hubspot_id:
+            return entry
+    raise HTTPException(404, f"Unknown candidate hubspot_id '{hubspot_id}'")
+
+
 @app.get("/api/dashboard")
 def dashboard():
     jobs = _all_jobs()
@@ -178,6 +190,7 @@ def dashboard():
         "recommendation_counts": dict(recommendation_counts),
         "top_candidates": [
             {
+                "hubspot_id": c["candidate"]["hubspot_id"],
                 "full_name": c["candidate"]["full_name"],
                 "overall_score": c["score"]["overall_score"],
                 "recommendation": c["score"]["recommendation"],
