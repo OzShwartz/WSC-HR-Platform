@@ -8,7 +8,7 @@ python-dotenv>=1.0
 #   pip install openai        # if using OPENAI_API_KEY
 #   pip install anthropic     # if using ANTHROPIC_API_KEY
 
-# API layer (Phase 2)
+# API layer (serves the React app in src/)
 fastapi>=0.110
 uvicorn>=0.29
 
