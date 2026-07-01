@@ -50,6 +50,7 @@ def results_to_dataframe(results: list[PipelineResult]) -> pd.DataFrame:
                 "missing_required_skills": "; ".join(r.score.missing_skills),
                 "mutual_connections_count": len(connected_names),
                 "mutual_connections": "; ".join(connected_names),
+                "referral_suggestion": r.score.referral_suggestion,
                 "conference_name": r.candidate.attendee.conference_name,
                 "conference_domain": r.candidate.attendee.conference_domain,
                 "linkedin_url": r.candidate.attendee.linkedin_url,
@@ -100,6 +101,7 @@ def _candidate_card(rank: int, r: PipelineResult) -> str:
       <p class="summary">{html.escape(r.summary.content)}</p>
       <p class="narrative"><strong>Why:</strong> {html.escape(r.recommendation_narrative.content)}</p>
       <p class="missing"><strong>Missing required skills:</strong> {html.escape(missing)}</p>
+      {f'<p class="referral"><strong>Warm intro:</strong> {html.escape(r.score.referral_suggestion)}</p>' if r.score.referral_suggestion else ""}
     </div>
     """
 
@@ -142,7 +144,8 @@ def write_html(job: JobOpening, results: list[PipelineResult], path: str | Path,
   .score-big {{ font-size: 28px; font-weight: 800; }}
   .score-max {{ font-size: 14px; color: #9ca3af; font-weight: 500; }}
   .score-meta {{ font-size: 12px; color: #6b7280; }}
-  .summary, .narrative, .missing {{ font-size: 13px; margin: 6px 0; }}
+  .summary, .narrative, .missing, .referral {{ font-size: 13px; margin: 6px 0; }}
+  .referral {{ background: rgba(208,242,0,0.15); border-radius: 6px; padding: 6px 10px; }}
 </style>
 </head>
 <body>

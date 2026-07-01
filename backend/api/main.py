@@ -190,8 +190,36 @@ def dashboard():
 
 @app.get("/api/employees")
 def list_employees():
+    """Includes the reverse view of mutual connections: for each employee, which
+    candidates (from the current pool) list them as a mutual connection. This is
+    what lets a recruiter look at an employee and ask "who could you introduce us
+    to?" instead of only seeing connections from the candidate's side."""
     employees = CsvRepository(DATA_DIR).load_employees()
-    return [dataclasses.asdict(e) for e in employees.values()]
+    pool = list_candidate_pool()
+
+    connections: dict[str, list[dict]] = {eid: [] for eid in employees}
+    for c in pool:
+        linkedin = c["candidate"]["linkedin"]
+        if not linkedin:
+            continue
+        for eid in linkedin["wsc_mutual_connections"]:
+            if eid in connections:
+                connections[eid].append(
+                    {
+                        "hubspot_id": c["candidate"]["hubspot_id"],
+                        "full_name": c["candidate"]["full_name"],
+                        "overall_score": c["score"]["overall_score"],
+                        "recommendation": c["score"]["recommendation"],
+                        "best_matching_job": c["best_matching_job"]["title"],
+                    }
+                )
+
+    result = []
+    for e in employees.values():
+        row = dataclasses.asdict(e)
+        row["connected_candidates"] = sorted(connections[e.employee_id], key=lambda x: -x["overall_score"])
+        result.append(row)
+    return result
 
 
 REQUIRED_EMPLOYEE_COLUMNS = {"employee_id", "full_name", "title", "department", "linkedin_id"}

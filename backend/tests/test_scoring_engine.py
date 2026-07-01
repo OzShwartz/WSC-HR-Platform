@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from backend.config.config_loader import load_domain_signals, load_scoring_weights, load_seniority_bands
 from backend.models.candidate import Candidate, ConferenceAttendee, JobOpening, LinkedInProfile, WscEmployee
-from backend.services.scoring_engine import score_candidate
+from backend.services.scoring_engine import best_referral_contact, score_candidate
 
 WEIGHTS = load_scoring_weights()
 DOMAIN_SIGNALS = load_domain_signals()
@@ -117,3 +117,30 @@ def test_mutual_connections_diminishing_returns():
     assert two > one
     # diminishing returns: the second connection adds less than the first
     assert (two - one) < one
+
+
+def test_referral_suggestion_prefers_same_department_over_just_seniority():
+    """WSC001 (David Cohen, VP Engineering) is more senior but in the wrong department;
+    WSC002 (Maya Levi, Senior ML Engineer) is in AI/ML, same as JOB. The suggestion
+    should point at the department match, not just whoever has the fancier title."""
+    li = LinkedInProfile(
+        linkedin_url="li/referral",
+        full_name="Test Person",
+        current_company="Acme",
+        current_title="ML Engineer",
+        location="Tel Aviv",
+        years_experience=6,
+        top_skills=["Python", "PyTorch", "Computer Vision"],
+        industry="Computer Vision",
+        wsc_mutual_connections=["WSC001", "WSC002"],
+    )
+    candidate = Candidate(attendee=_attendee("ML Engineer", linkedin_url="li/referral"), linkedin=li)
+    suggestion = best_referral_contact(candidate, JOB, EMPLOYEES)
+
+    assert "Maya Levi" in suggestion
+    assert "David Cohen" not in suggestion
+
+
+def test_referral_suggestion_empty_when_no_connections():
+    candidate = Candidate(attendee=_attendee("ML Engineer", linkedin_url=""), linkedin=None)
+    assert best_referral_contact(candidate, JOB, EMPLOYEES) == ""

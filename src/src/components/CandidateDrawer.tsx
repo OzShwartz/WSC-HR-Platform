@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { ScoredCandidate } from '../types'
 import { RecommendationBadge } from './RecommendationBadge'
 import { ScoreDial } from './ScoreDial'
-import { ExternalLink, X } from 'lucide-react'
+import { ExternalLink, Users, X } from 'lucide-react'
 
 function linkedInHref(url: string): string {
   if (!url) return ''
@@ -78,6 +78,16 @@ export function CandidateDrawer({ result, onClose }: { result: ScoredCandidate; 
               ))}
             </div>
           </Section>
+        )}
+
+        {score.referral_suggestion && (
+          <div className="mt-5 flex items-start gap-2.5 rounded-lg border border-[#D0F200]/40 bg-[#D0F200]/10 p-3 dark:border-[#D0F200]/20 dark:bg-[#D0F200]/5">
+            <Users size={16} className="mt-0.5 shrink-0 text-neutral-700 dark:text-[#D0F200]" />
+            <div className="text-sm text-neutral-800 dark:text-neutral-200">
+              <span className="font-semibold">Warm intro available: </span>
+              {score.referral_suggestion}
+            </div>
+          </div>
         )}
 
         <Section title="Score Breakdown">

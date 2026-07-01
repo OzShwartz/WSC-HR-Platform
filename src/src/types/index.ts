@@ -35,6 +35,7 @@ export interface ScoreBreakdown {
   strengths: string[]
   weaknesses: string[]
   missing_skills: string[]
+  referral_suggestion: string
 }
 
 export interface AIOutput {
@@ -114,6 +115,14 @@ export interface ScoringWeights {
   recruiter_feedback: number
 }
 
+export interface ConnectedCandidate {
+  hubspot_id: string
+  full_name: string
+  overall_score: number
+  recommendation: string
+  best_matching_job: string
+}
+
 export interface Employee {
   employee_id: string
   full_name: string
@@ -121,6 +130,7 @@ export interface Employee {
   department: string
   linkedin_id: string
   work_history: string[]
+  connected_candidates: ConnectedCandidate[]
 }
 
 export interface Integration {

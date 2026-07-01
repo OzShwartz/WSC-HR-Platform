@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { api } from '../api/client'
 import type { Employee } from '../types'
-import { Search, FileSpreadsheet, Download, Upload } from 'lucide-react'
+import { Search, FileSpreadsheet, Download, Upload, Users, ChevronDown } from 'lucide-react'
 import { MultiSelectDropdown } from '../components/MultiSelectDropdown'
+import { RecommendationBadge } from '../components/RecommendationBadge'
 
 function toCsv(employees: Employee[]): string {
   const header = 'employee_id,full_name,title,department,linkedin_id,work_history'
@@ -20,8 +21,18 @@ export function Employees() {
   const [departments, setDepartments] = useState<string[]>([])
   const [menuOpen, setMenuOpen] = useState(false)
   const [importMessage, setImportMessage] = useState('')
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const fileInputRef = useRef<HTMLInputElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
+
+  function toggleExpanded(employeeId: string) {
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      if (next.has(employeeId)) next.delete(employeeId)
+      else next.add(employeeId)
+      return next
+    })
+  }
 
   function load() {
     api.employees().then(setEmployees)
@@ -157,20 +168,53 @@ export function Employees() {
             {department} &middot; {members.length}
           </h2>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {members.map((e) => (
-              <div
-                key={e.employee_id}
-                className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900"
-              >
-                <div className="font-semibold text-neutral-900 dark:text-neutral-100">{e.full_name}</div>
-                <div className="text-sm text-neutral-500 dark:text-neutral-400">{e.title}</div>
-                {e.work_history.length > 0 && (
-                  <div className="mt-2 text-[11px] text-neutral-400 dark:text-neutral-500">
-                    Previously: {e.work_history.join('; ')}
-                  </div>
-                )}
-              </div>
-            ))}
+            {members.map((e) => {
+              const isOpen = expanded.has(e.employee_id)
+              const hasConnections = e.connected_candidates.length > 0
+              return (
+                <div
+                  key={e.employee_id}
+                  className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900"
+                >
+                  <div className="font-semibold text-neutral-900 dark:text-neutral-100">{e.full_name}</div>
+                  <div className="text-sm text-neutral-500 dark:text-neutral-400">{e.title}</div>
+                  {e.work_history.length > 0 && (
+                    <div className="mt-2 text-[11px] text-neutral-400 dark:text-neutral-500">
+                      Previously: {e.work_history.join('; ')}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => hasConnections && toggleExpanded(e.employee_id)}
+                    disabled={!hasConnections}
+                    className="mt-3 flex w-full items-center justify-between rounded-md bg-neutral-50 px-2 py-1.5 text-xs font-medium text-neutral-600 disabled:opacity-50 dark:bg-neutral-800/60 dark:text-neutral-300"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Users size={13} />
+                      {hasConnections
+                        ? `Connected to ${e.connected_candidates.length} candidate(s) in the pool`
+                        : 'No candidate connections'}
+                    </span>
+                    {hasConnections && (
+                      <ChevronDown size={14} className={isOpen ? 'rotate-180 transition-transform' : 'transition-transform'} />
+                    )}
+                  </button>
+
+                  {isOpen && hasConnections && (
+                    <div className="mt-2 flex flex-col gap-1.5 border-t border-neutral-100 pt-2 dark:border-neutral-800">
+                      {e.connected_candidates.map((c) => (
+                        <div key={c.hubspot_id} className="flex items-center justify-between text-xs">
+                          <span className="text-neutral-700 dark:text-neutral-300">
+                            {c.full_name} <span className="text-neutral-400 dark:text-neutral-500">- {c.best_matching_job}</span>
+                          </span>
+                          <RecommendationBadge recommendation={c.recommendation} />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
       ))}

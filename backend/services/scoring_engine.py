@@ -254,6 +254,40 @@ def score_mutual_connections(candidate: Candidate, employees: dict[str, WscEmplo
     )
 
 
+def best_referral_contact(candidate: Candidate, job: JobOpening, employees: dict[str, WscEmployee]) -> str:
+    """Deterministically ranks a candidate's mutual WSC connections to suggest who a
+    recruiter should actually ask for a warm intro - not just "there are 2 connections,"
+    but "ask this one, here's why." Ranking is plain arithmetic (department match +
+    seniority), same as every other sub-score: the recommendation itself is never an
+    LLM call, only its phrasing could be (and today it isn't, for consistency)."""
+    li = candidate.linkedin
+    if li is None or not li.wsc_mutual_connections:
+        return ""
+
+    connected = [employees[eid] for eid in li.wsc_mutual_connections if eid in employees]
+    if not connected:
+        return ""
+
+    def rank(e: WscEmployee) -> tuple[int, str]:
+        department_match = 2 if e.department.lower() == job.department.lower() else 0
+        seniority = 1 if any(m in e.title.lower() for m in _SENIOR_TITLE_MARKERS) else 0
+        return (department_match + seniority, e.full_name)  # name as a stable tie-breaker
+
+    best = max(connected, key=rank)
+    score, _ = rank(best)
+
+    if score >= 3:
+        why = f"{best.department} peer and senior enough to vouch credibly"
+    elif score == 2:
+        why = f"works in {job.department}, the same department as this role"
+    elif score == 1:
+        why = "senior enough to make an effective introduction"
+    else:
+        why = "the only mutual connection available"
+
+    return f"Ask {best.full_name} ({best.title}, {best.department}) for a warm introduction - {why}."
+
+
 def score_conference_relevance(candidate: Candidate, job: JobOpening) -> SubScore:
     attendee = candidate.attendee
     conf_terms = _stem_tokenize(attendee.conference_domain) | _stem_tokenize(attendee.conference_name)
@@ -383,4 +417,5 @@ def score_candidate(
         strengths=strengths,
         weaknesses=weaknesses,
         missing_skills=missing_skills,
+        referral_suggestion=best_referral_contact(candidate, job, employees),
     )
