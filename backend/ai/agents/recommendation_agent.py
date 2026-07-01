@@ -1,7 +1,7 @@
-"""Candidate Recommendation Agent — docs/04-ai-architecture.md.
+"""Candidate Recommendation Agent - docs/04-ai-architecture.md.
 
 Narrates the ScoreBreakdown the deterministic scoring engine already
-produced. This agent NEVER changes the recommendation label or the score —
+produced. This agent NEVER changes the recommendation label or the score -
 it only explains them (docs/00-project-constitution.md). If validation of
 the LLM output ever detected a different recommendation label than the one
 computed, that output would be rejected; the fallback template is immune to
@@ -34,7 +34,7 @@ def _context(candidate: Candidate, job: JobOpening, score: ScoreBreakdown) -> di
 
 def _fallback_narrative(candidate: Candidate, job: JobOpening, score: ScoreBreakdown) -> str:
     parts = [
-        f"{candidate.full_name} scored {score.overall_score}/100 for {job.title} — {score.recommendation} "
+        f"{candidate.full_name} scored {score.overall_score}/100 for {job.title} - {score.recommendation} "
         f"(confidence {score.confidence:.0%})."
     ]
     if score.strengths:

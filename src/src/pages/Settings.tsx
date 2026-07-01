@@ -55,7 +55,7 @@ export function Settings() {
       <div>
         <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-50">Settings</h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Configuration — nothing here is hardcoded in the app
+          Configuration - nothing here is hardcoded in the app
         </p>
       </div>
 
@@ -88,7 +88,7 @@ export function Settings() {
           </span>
         </div>
         <p className="mb-4 text-xs text-neutral-400 dark:text-neutral-500">
-          Persists to backend/config/scoring_weights.json — saving recalculates every candidate score.
+          Persists to backend/config/scoring_weights.json - saving recalculates every candidate score.
         </p>
         {!draft ? (
           <div className="text-neutral-400 dark:text-neutral-500">Loading…</div>

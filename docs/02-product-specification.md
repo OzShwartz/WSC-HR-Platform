@@ -1,8 +1,8 @@
-# 02 — Product Specification
+# 02 - Product Specification
 
 Functional spec for the five product modules introduced in [01-prd.md](01-prd.md) §6. Scoring details live in [03-scoring-engine.md](03-scoring-engine.md); AI behavior details live in [04-ai-architecture.md](04-ai-architecture.md).
 
-## Module 1 — Dashboard
+## Module 1 - Dashboard
 
 **Purpose:** immediate visibility into hiring opportunities; the central navigation hub for every other module.
 
@@ -16,9 +16,9 @@ Functional spec for the five product modules introduced in [01-prd.md](01-prd.md
 
 **Charts:** Candidate Distribution · Conference Distribution · Hiring Funnel · Experience Distribution · Score Distribution · Industry Distribution · Top Skills · Conference ROI.
 
-## Module 2 — Conference Registration
+## Module 2 - Conference Registration
 
-**Purpose:** the primary entry point for every new candidate discovered at a conference, meetup, hackathon, university event, or referral. Must feel fast — registration is designed to take under one minute.
+**Purpose:** the primary entry point for every new candidate discovered at a conference, meetup, hackathon, university event, or referral. Must feel fast - registration is designed to take under one minute.
 
 **Flow:**
 ```
@@ -37,27 +37,27 @@ Recruiter opens registration page → fills candidate info → system validates 
 
 **Duplicate detection:** checked against email, LinkedIn URL, phone, and full name + company. On match: warn, then let the recruiter merge, cancel, or continue anyway.
 
-## Module 3 — Candidate Pool
+## Module 3 - Candidate Pool
 
 **Purpose:** the central, CRM-like repository of every candidate ever registered. Every other feature depends on it.
 
-**Views:** Table View (status, name, company, title, experience, overall score, best-matching job, conference, mutual connections, tags, updated date — optimized for large datasets) and Card View (expandable profile cards — optimized for review).
+**Views:** Table View (status, name, company, title, experience, overall score, best-matching job, conference, mutual connections, tags, updated date - optimized for large datasets) and Card View (expandable profile cards - optimized for review).
 
 **Candidate Card contents:**
 - *Header:* photo, name, position, company, country, experience, overall score, White/Gray/Black badge, AI confidence
 - *Personal:* email, phone, location, languages, portfolio, GitHub, LinkedIn
 - *Professional:* company, title, industry, experience, previous companies, education, certifications, technical/soft skills
 - *Conference:* name, date, recruiter, notes, source, registration date
-- *AI Summary:* short recruiter-friendly generated summary (see [04-ai-architecture.md](04-ai-architecture.md) — Candidate Summary Service)
+- *AI Summary:* short recruiter-friendly generated summary (see [04-ai-architecture.md](04-ai-architecture.md) - Candidate Summary Service)
 - *Score Breakdown:* overall → experience → skills → title match → industry match → domain match → conference relevance → mutual connections → company reputation → education → recruiter feedback → AI confidence (full model in [03-scoring-engine.md](03-scoring-engine.md))
-- *AI Recommendation:* Excellent Match / Strong Match / Potential Match / Needs Manual Review / Low Priority / Do Not Contact — each with reasoning, strengths, weaknesses, missing skills, matching jobs, supporting evidence, and confidence score
+- *AI Recommendation:* Excellent Match / Strong Match / Potential Match / Needs Manual Review / Low Priority / Do Not Contact - each with reasoning, strengths, weaknesses, missing skills, matching jobs, supporting evidence, and confidence score
 - *Recruiter Notes:* private, timestamped, authored, editable, searchable
 - *Timeline:* registered, updated, LinkedIn updated, score changed, recommendation changed, tags added, status changed, notes added
 
 **Candidate Status** (exactly one per candidate):
-- **White List** — high priority, excellent match, should be contacted
-- **Gray List** — unknown quality, needs recruiter review
-- **Black List** — should not be contacted; a reason is mandatory (Rejected Previously, Former Employee, No Cultural Fit, Wrong Domain, Duplicate, Requested No Contact, Other)
+- **White List** - high priority, excellent match, should be contacted
+- **Gray List** - unknown quality, needs recruiter review
+- **Black List** - should not be contacted; a reason is mandatory (Rejected Previously, Former Employee, No Cultural Fit, Wrong Domain, Duplicate, Requested No Contact, Other)
 
 **Tags:** free-form, multiple allowed (e.g. Backend, AI, Python, Cloud, Leadership, Referral, Conference Speaker, Ex-Google, Student).
 
@@ -67,29 +67,29 @@ Recruiter opens registration page → fills candidate info → system validates 
 
 **Candidate Comparison:** side-by-side comparison across score, experience, skills, industry, education, company, mutual connections, and AI recommendation, with the AI concluding which candidate best fits the selected job and explaining why.
 
-## Module 4 — Jobs
+## Module 4 - Jobs
 
 **Purpose:** manage open positions; every job drives candidate ranking against its own scoring configuration.
 
-**Job Card:** title, department, hiring manager, priority, status, created/updated dates, location, employment type — expandable accordion.
+**Job Card:** title, department, hiring manager, priority, status, created/updated dates, location, employment type - expandable accordion.
 
 **Job Details:** description, responsibilities, must-have skills, nice-to-have skills, years of experience, education, languages, industry, keywords.
 
-**Scoring Configuration:** each job carries its own configurable weights (skills, experience, title match, industry match, domain match, education, mutual connections, conference match, recruiter feedback) that always sum to 100% — see [03-scoring-engine.md](03-scoring-engine.md).
+**Scoring Configuration:** each job carries its own configurable weights (skills, experience, title match, industry match, domain match, education, mutual connections, conference match, recruiter feedback) that always sum to 100% - see [03-scoring-engine.md](03-scoring-engine.md).
 
 **AI Analysis** (per job): ideal candidate profile, recommended search terms, suggested skills, related roles, hiring risks, market difficulty.
 
 **Matching Candidates:** ranked list with overall score, AI summary, matching explanation, recommendation, missing skills, strengths, and actions (Contact, Open Candidate, Compare, Export).
 
-## Module 5 — Settings
+## Module 5 - Settings
 
-**Purpose:** the platform's configuration center — business logic is configured here, not hardcoded, so an HR Manager can change platform behavior without a code change.
+**Purpose:** the platform's configuration center - business logic is configured here, not hardcoded, so an HR Manager can change platform behavior without a code change.
 
-- **General:** app name/version, logo, theme (Light/Dark/Custom Company Theme — applies instantly), language, date format, time zone, CSV delimiter, default landing page.
+- **General:** app name/version, logo, theme (Light/Dark/Custom Company Theme - applies instantly), language, date format, time zone, CSV delimiter, default landing page.
 - **Scoring Configuration:** see [03-scoring-engine.md](03-scoring-engine.md).
-- **AI Configuration:** confidence threshold, recommendation style, summary length, max context size, max candidates per batch, max tokens, reasoning depth, hallucination protection, guardrails, grounding — see [04-ai-architecture.md](04-ai-architecture.md).
+- **AI Configuration:** confidence threshold, recommendation style, summary length, max context size, max candidates per batch, max tokens, reasoning depth, hallucination protection, guardrails, grounding - see [04-ai-architecture.md](04-ai-architecture.md).
 - **Prompt Management:** see [09-prompt-strategy.md](09-prompt-strategy.md).
 - **Knowledge Base:** see [10-knowledge-base.md](10-knowledge-base.md).
-- **Integrations:** current (CSV) and future-ready (HubSpot, LinkedIn, Comeet, Slack, Teams, Google Calendar, Outlook, REST APIs, MCP servers, Azure Storage, AWS S3, Vector Database) — each with connection status, last sync, auth status, health check, logs, and sync frequency. Detailed in [05-system-architecture.md](05-system-architecture.md).
+- **Integrations:** current (CSV) and future-ready (HubSpot, LinkedIn, Comeet, Slack, Teams, Google Calendar, Outlook, REST APIs, MCP servers, Azure Storage, AWS S3, Vector Database) - each with connection status, last sync, auth status, health check, logs, and sync frequency. Detailed in [05-system-architecture.md](05-system-architecture.md).
 - **Import/Export:** import Candidates/Jobs/Conference/Skills CSVs; export Candidates/Jobs/Dashboard/Analytics/Scores/Reports/Audit Logs/AI Insights.
 - **Developer Tools** (dev-mode only): reset demo data, refresh scores/AI, clear cache, regenerate summaries, rebuild search index/embeddings, reload knowledge base, system health.

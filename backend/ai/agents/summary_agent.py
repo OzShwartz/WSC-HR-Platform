@@ -1,4 +1,4 @@
-"""Candidate Summary Agent — docs/04-ai-architecture.md.
+"""Candidate Summary Agent - docs/04-ai-architecture.md.
 
 Produces a short recruiter-facing summary. Uses an LLM if one is configured
 (backend/ai/llm_client.py); otherwise falls back to a deterministic template
@@ -39,7 +39,7 @@ def _fallback_summary(candidate: Candidate, job: JobOpening) -> str:
     li = candidate.linkedin
     if li is None:
         return (
-            f"{candidate.full_name} — {candidate.attendee.title} at {candidate.attendee.company}. "
+            f"{candidate.full_name} - {candidate.attendee.title} at {candidate.attendee.company}. "
             f"Met at {candidate.attendee.conference_name}. No LinkedIn match found, so skills and "
             f"experience could not be verified; treat as a lower-confidence lead for {job.title}."
         )
@@ -72,7 +72,7 @@ def generate_summary(candidate: Candidate, job: JobOpening, llm: LLMClient | Non
                     source=f"llm:{llm.provider}:{llm.model_name}",
                 )
         except Exception:
-            pass  # fall through to deterministic fallback — never let an AI failure break the pipeline
+            pass  # fall through to deterministic fallback - never let an AI failure break the pipeline
 
     return AIOutput(
         content=_fallback_summary(candidate, job),

@@ -1,5 +1,5 @@
 {
-  "_comment": "Deterministic signal-vs-noise vocabulary for Domain Match (docs/03-scoring-engine.md). This is intentionally a plain, editable data file, not a model — it encodes the same judgment call a recruiter would make by eye ('is this actually a technical/domain role, or an adjacent one'), just applied consistently. Extend the lists as new conferences/roles are seen.",
+  "_comment": "Deterministic signal-vs-noise vocabulary for Domain Match (docs/03-scoring-engine.md). This is intentionally a plain, editable data file, not a model - it encodes the same judgment call a recruiter would make by eye ('is this actually a technical/domain role, or an adjacent one'), just applied consistently. Extend the lists as new conferences/roles are seen.",
 
   "noise_title_keywords": [
     "recruiter", "talent acquisition", "sourcer",

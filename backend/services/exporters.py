@@ -2,7 +2,7 @@
 a recruiter-usable CSV, and (bonus) a branded HTML summary view.
 
 docs/01-prd.md §"Define the output": the output must be structured and usable
-by a recruiter without additional processing — every column here is meant to
+by a recruiter without additional processing - every column here is meant to
 be read directly, not post-processed.
 """
 
@@ -119,7 +119,7 @@ def write_html(job: JobOpening, results: list[PipelineResult], path: str | Path,
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Talent Intelligence Platform — {html.escape(job.title)}</title>
+<title>Talent Intelligence Platform - {html.escape(job.title)}</title>
 <style>
   :root {{ --ink: {_BRAND_INK}; --accent: {_BRAND_ACCENT}; }}
   * {{ box-sizing: border-box; }}
@@ -149,7 +149,7 @@ def write_html(job: JobOpening, results: list[PipelineResult], path: str | Path,
 <header>
   {logo_html}
   <div>
-    <h1>Candidate Recommendations — {html.escape(job.title)}</h1>
+    <h1>Candidate Recommendations - {html.escape(job.title)}</h1>
     <p>{html.escape(job.department)} &middot; {html.escape(job.seniority)} &middot; {len(results)} candidates evaluated</p>
   </div>
 </header>

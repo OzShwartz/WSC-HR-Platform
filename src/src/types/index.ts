@@ -8,6 +8,14 @@ export interface Job {
   nice_to_have: string[]
 }
 
+export type JobDraft = Omit<Job, 'job_id'>
+
+export interface BestMatchingJob {
+  job_id: string
+  title: string
+  department: string
+}
+
 export interface SubScore {
   name: string
   raw_score: number
@@ -76,7 +84,7 @@ export interface ScoredCandidate {
   summary: AIOutput
   recommendation_narrative: AIOutput
   explanation: AIOutput
-  best_matching_job?: { job_id: string; title: string }
+  best_matching_job?: BestMatchingJob
 }
 
 export interface DashboardData {

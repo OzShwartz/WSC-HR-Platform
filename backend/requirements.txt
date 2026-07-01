@@ -2,7 +2,7 @@ pandas>=2.2
 pydantic>=2.6
 python-dotenv>=1.0
 
-# Optional — only needed if you set OPENAI_API_KEY or ANTHROPIC_API_KEY to
+# Optional - only needed if you set OPENAI_API_KEY or ANTHROPIC_API_KEY to
 # enable real LLM calls in the AI layer (backend/ai/). Without a key, the
 # pipeline runs fully using deterministic fallback narratives. Install with:
 #   pip install openai        # if using OPENAI_API_KEY
@@ -11,6 +11,7 @@ python-dotenv>=1.0
 # API layer (serves the React app in src/)
 fastapi>=0.110
 uvicorn>=0.29
+python-multipart>=0.0.9  # required by FastAPI for file uploads (CSV import)
 
 # Tests
 pytest>=8.0

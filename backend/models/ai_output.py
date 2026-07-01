@@ -1,4 +1,4 @@
-"""The explainability contract every AI output must satisfy — docs/00-project-constitution.md."""
+"""The explainability contract every AI output must satisfy - docs/00-project-constitution.md."""
 
 from __future__ import annotations
 

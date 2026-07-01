@@ -1,8 +1,8 @@
-"""Score models — the explainability contract from docs/00-project-constitution.md.
+"""Score models - the explainability contract from docs/00-project-constitution.md.
 
 Every sub-score and the overall score carry raw value, weight, reasoning,
 evidence, and a flag for whether the underlying data was actually available
-— never just a bare number.
+- never just a bare number.
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ class SubScore:
 @dataclass
 class ScoreBreakdown:
     overall_score: float
-    confidence: float  # 0-1 — how much of the overall score rests on real (non-missing) data
+    confidence: float  # 0-1 - how much of the overall score rests on real (non-missing) data
     domain_relevance_multiplier: float
     sub_scores: list[SubScore]
     recommendation: str

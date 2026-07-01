@@ -131,7 +131,7 @@ export function CandidateDrawer({ result, onClose }: { result: ScoredCandidate; 
 
         <Section title="Conference">
           <div className="text-sm text-neutral-700 dark:text-neutral-300">
-            {candidate.conference_name} — {candidate.conference_domain} ({candidate.conference_date})
+            {candidate.conference_name} - {candidate.conference_domain} ({candidate.conference_date})
           </div>
           {candidate.notes && (
             <div className="mt-1 text-xs italic text-neutral-500 dark:text-neutral-400">"{candidate.notes}"</div>

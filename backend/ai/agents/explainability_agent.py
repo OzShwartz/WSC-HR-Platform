@@ -1,4 +1,4 @@
-"""Explainability Agent — docs/04-ai-architecture.md.
+"""Explainability Agent - docs/04-ai-architecture.md.
 
 Unlike the summary and recommendation agents, this one never calls an LLM at
 all: "why was this candidate scored this way" is already fully captured in
@@ -27,7 +27,7 @@ def build_explanation(score: ScoreBreakdown) -> AIOutput:
     return AIOutput(
         content="\n".join(lines),
         confidence=score.confidence,
-        reasoning="Deterministic formatting of the scoring engine's own sub-scores — no LLM involved.",
+        reasoning="Deterministic formatting of the scoring engine's own sub-scores - no LLM involved.",
         evidence=[e for sub in score.sub_scores for e in sub.evidence],
         assumptions=assumptions,
         prompt_version="n/a",

@@ -1,4 +1,4 @@
-"""CLI entry point — the required deliverable per recruitment-task/index.html:
+"""CLI entry point - the required deliverable per recruitment-task/index.html:
 
     python -m backend.run_pipeline --job-id JOB001
 
@@ -54,7 +54,7 @@ def main() -> None:
 
     top = results[0] if results else None
     if top:
-        print(f"\nTop candidate: {top.candidate.full_name} — {top.score.overall_score}/100 ({top.score.recommendation})")
+        print(f"\nTop candidate: {top.candidate.full_name} - {top.score.overall_score}/100 ({top.score.recommendation})")
 
 
 if __name__ == "__main__":

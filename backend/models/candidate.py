@@ -1,6 +1,6 @@
 """Domain models for a conference-attendee candidate and its enrichment data.
 
-These are plain dataclasses, not Pydantic schemas — schemas (backend/schemas/)
+These are plain dataclasses, not Pydantic schemas - schemas (backend/schemas/)
 are for API/IO validation; models are the internal representation the
 services and scoring engine operate on.
 """

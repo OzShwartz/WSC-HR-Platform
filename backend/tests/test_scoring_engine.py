@@ -1,4 +1,4 @@
-"""Scoring-engine tests — docs/08-testing-strategy.md ("Scoring Tests" is the
+"""Scoring-engine tests - docs/08-testing-strategy.md ("Scoring Tests" is the
 highest-value test category: if the score is wrong, every downstream
 recommendation is wrong regardless of the AI layer)."""
 

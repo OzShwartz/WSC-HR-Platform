@@ -1,4 +1,4 @@
-"""Repository layer — the only place in the codebase that knows about CSV files.
+"""Repository layer - the only place in the codebase that knows about CSV files.
 
 Per docs/06-folder-structure.md, swapping CSV for HubSpot/LinkedIn/Comeet APIs
 or a real database later should mean rewriting this file, not the services or
@@ -27,7 +27,7 @@ class CsvRepository:
 
     In production this class is replaced by HubSpotRepository /
     LinkedInRepository / ComeetRepository implementations behind the same
-    read interface — see docs/11-tradeoffs.md #4.
+    read interface - see docs/11-tradeoffs.md #4.
     """
 
     def __init__(self, data_dir: str | Path):
@@ -121,3 +121,65 @@ class CsvRepository:
             available = ", ".join(sorted(jobs)) or "(none)"
             raise KeyError(f"Unknown job_id '{job_id}'. Available: {available}")
         return jobs[job_id]
+
+    def next_job_id(self) -> str:
+        existing = self.load_jobs()
+        numbers = [int(jid[3:]) for jid in existing if jid.startswith("JOB") and jid[3:].isdigit()]
+        return f"JOB{(max(numbers) + 1) if numbers else 1:03d}"
+
+    def save_job(self, job: JobOpening) -> None:
+        """Upsert by job_id and rewrite job_openings.csv in full - this is a small,
+        infrequently-written file, so read-modify-write-whole-file is simpler and
+        safer than trying to patch a single CSV row in place."""
+        jobs = self.load_jobs()
+        jobs[job.job_id] = job
+        self._write_jobs(jobs)
+
+    def delete_job(self, job_id: str) -> bool:
+        jobs = self.load_jobs()
+        if job_id not in jobs:
+            return False
+        del jobs[job_id]
+        self._write_jobs(jobs)
+        return True
+
+    def _write_jobs(self, jobs: dict[str, JobOpening]) -> None:
+        rows = [
+            {
+                "job_id": j.job_id,
+                "title": j.title,
+                "department": j.department,
+                "seniority": j.seniority,
+                "key_domains": ";".join(j.key_domains),
+                "required_skills": ";".join(j.required_skills),
+                "nice_to_have": ";".join(j.nice_to_have),
+            }
+            for j in jobs.values()
+        ]
+        pd.DataFrame(rows, columns=[
+            "job_id", "title", "department", "seniority", "key_domains", "required_skills", "nice_to_have",
+        ]).to_csv(self.data_dir / "job_openings.csv", index=False)
+
+    def save_employees(self, employees: list[WscEmployee]) -> int:
+        """Upsert a batch of employees (by employee_id) into wsc_employees.csv.
+        Used by the CSV import feature - see docs/11-tradeoffs.md #4 on assuming
+        HubSpot/LinkedIn/Comeet access already exists and today's actual data
+        path being a CSV export from each system."""
+        existing = self.load_employees()
+        for e in employees:
+            existing[e.employee_id] = e
+        rows = [
+            {
+                "employee_id": e.employee_id,
+                "full_name": e.full_name,
+                "title": e.title,
+                "department": e.department,
+                "linkedin_id": e.linkedin_id,
+                "work_history": ";".join(e.work_history),
+            }
+            for e in existing.values()
+        ]
+        pd.DataFrame(rows, columns=[
+            "employee_id", "full_name", "title", "department", "linkedin_id", "work_history",
+        ]).to_csv(self.data_dir / "wsc_employees.csv", index=False)
+        return len(employees)

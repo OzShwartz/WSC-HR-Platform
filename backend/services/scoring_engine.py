@@ -1,7 +1,7 @@
-"""Deterministic candidate scoring engine — docs/03-scoring-engine.md.
+"""Deterministic candidate scoring engine - docs/03-scoring-engine.md.
 
 Everything here is plain arithmetic and string matching. No LLM call happens
-in this module, ever — per docs/00-project-constitution.md, "AI never
+in this module, ever - per docs/00-project-constitution.md, "AI never
 calculates scores, it only explains them." The AI layer (backend/ai/) takes
 the ScoreBreakdown this module produces and narrates it; it never overrides
 the numbers.
@@ -63,7 +63,7 @@ def _normalize_skills(skills: list[str], synonyms: dict[str, str]) -> set[str]:
 
 
 def _overlap_ratio(candidate_terms: set[str], target_terms: set[str]) -> float:
-    """Fraction of target_terms found in candidate_terms — how much of what the
+    """Fraction of target_terms found in candidate_terms - how much of what the
     job asks for shows up in the candidate's profile. Not symmetric Jaccard:
     a candidate with many extra unrelated skills shouldn't be penalized."""
     if not target_terms:
@@ -92,7 +92,7 @@ def compute_domain_relevance(
         return (
             0.15,
             f"Title reads as a non-technical/adjacent role ({', '.join(noise_hits)}), "
-            "not the job's professional domain — dampened regardless of conference attendance.",
+            "not the job's professional domain - dampened regardless of conference attendance.",
             noise_hits,
         )
 
@@ -108,7 +108,7 @@ def compute_domain_relevance(
     skill_overlap = _overlap_ratio(candidate_skills, required_skills)
 
     # Either signal alone (clearly the right domain, OR clearly has the required skills) is
-    # enough to establish domain fit — they don't need to both be strong.
+    # enough to establish domain fit - they don't need to both be strong.
     overlap = max(domain_coverage, skill_overlap)
     multiplier = round(0.4 + 0.6 * min(overlap * 1.5, 1.0), 2)  # floor 0.4, reaches 1.0 at ~67%+ overlap
     matched_skills = sorted(s for s in required_skills if s in candidate_skills)
@@ -117,7 +117,7 @@ def compute_domain_relevance(
         f"{len(matched_domains)}/{len(job.key_domains)} job domains matched ({matched_domains}); "
         f"{len(matched_skills)}/{len(required_skills)} required skills present."
         if evidence
-        else "No overlap found between candidate profile and job domain/skills — treated as weak domain fit, not zero."
+        else "No overlap found between candidate profile and job domain/skills - treated as weak domain fit, not zero."
     )
     return multiplier, reasoning, evidence
 
@@ -195,7 +195,7 @@ def score_title(candidate: Candidate, job: JobOpening, domain_multiplier: float)
         name="title",
         raw_score=round(min(raw, 100), 1),
         weight=0,
-        reasoning=f"'{current_title}' vs. target title '{job.title}' — {overlap:.0%} term overlap (domain relevance x{domain_multiplier}).",
+        reasoning=f"'{current_title}' vs. target title '{job.title}' - {overlap:.0%} term overlap (domain relevance x{domain_multiplier}).",
         evidence=[current_title],
         insufficient_data=li is None,
     )
@@ -214,7 +214,7 @@ def score_industry(candidate: Candidate, job: JobOpening, domain_multiplier: flo
             evidence=matched,
             insufficient_data=True,
         )
-    # Industry field alone is often a single short phrase ("Sports Technology") — widen the
+    # Industry field alone is often a single short phrase ("Sports Technology") - widen the
     # candidate signal with title/skills so multi-word job domains have enough to match against.
     candidate_text = " ".join(filter(None, [li.industry, li.current_title, " ".join(li.top_skills)]))
     candidate_terms = _stem_tokenize(candidate_text)
@@ -223,7 +223,7 @@ def score_industry(candidate: Candidate, job: JobOpening, domain_multiplier: flo
         name="industry",
         raw_score=round(min(coverage * 100 * domain_multiplier, 100), 1),
         weight=0,
-        reasoning=f"Industry '{li.industry}' vs. job domains {job.key_domains} — {len(matched)}/{len(job.key_domains)} domains matched ({matched}).",
+        reasoning=f"Industry '{li.industry}' vs. job domains {job.key_domains} - {len(matched)}/{len(job.key_domains)} domains matched ({matched}).",
         evidence=matched,
     )
 
@@ -279,7 +279,7 @@ def score_education() -> SubScore:
         name="education",
         raw_score=50.0,
         weight=0,
-        reasoning="No education data available in the current data sources — neutral placeholder score.",
+        reasoning="No education data available in the current data sources - neutral placeholder score.",
         insufficient_data=True,
     )
 
@@ -289,7 +289,7 @@ def score_recruiter_feedback() -> SubScore:
         name="recruiter_feedback",
         raw_score=50.0,
         weight=0,
-        reasoning="No recruiter feedback recorded yet — this is a first-pass batch score.",
+        reasoning="No recruiter feedback recorded yet - this is a first-pass batch score.",
         insufficient_data=True,
     )
 
@@ -348,7 +348,7 @@ def score_candidate(
     overall = round(sum(s.weighted_score for s in sub_scores), 1)
     confidence = round(sum(s.weight for s in sub_scores if not s.insufficient_data), 2)
     if candidate.linkedin is None:
-        confidence = round(confidence * 0.7, 2)  # no enrichment at all — extra haircut
+        confidence = round(confidence * 0.7, 2)  # no enrichment at all - extra haircut
 
     ranked = sorted(sub_scores, key=lambda s: s.weighted_score, reverse=True)
     strengths = [f"{s.name.replace('_', ' ').title()}: {s.reasoning}" for s in ranked[:2] if s.raw_score >= 60]

@@ -1,4 +1,4 @@
-"""Loads prompt templates from backend/ai/prompts/*.md — docs/09-prompt-strategy.md.
+"""Loads prompt templates from backend/ai/prompts/*.md - docs/09-prompt-strategy.md.
 
 Prompts are plain Markdown, not Python strings, so they can be edited and
 reviewed independently of the code that calls them (docs/00-project-constitution.md

@@ -1,9 +1,9 @@
-"""The end-to-end pipeline — docs/01-prd.md user journey, condensed to a batch run.
+"""The end-to-end pipeline - docs/01-prd.md user journey, condensed to a batch run.
 
 Input goes CSV → Candidate models → deterministic ScoreBreakdown → AI
 narratives (LLM if configured, deterministic fallback otherwise). This is the
 single function both the CLI runner (backend/run_pipeline.py) and the future
-FastAPI endpoint call — the orchestration logic lives here exactly once.
+FastAPI endpoint call - the orchestration logic lives here exactly once.
 """
 
 from __future__ import annotations

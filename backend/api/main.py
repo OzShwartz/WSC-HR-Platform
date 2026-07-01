@@ -1,8 +1,8 @@
-"""FastAPI layer over the Core pipeline — docs/05-system-architecture.md.
+"""FastAPI layer over the Core pipeline - docs/05-system-architecture.md.
 
 This is a thin translation layer: every route calls into backend/services/
 (the same pipeline the CLI uses) and serializes the result. No scoring or AI
-logic lives here — see docs/07-development-standards.md ("Service Rules").
+logic lives here - see docs/07-development-standards.md ("Service Rules").
 """
 
 from __future__ import annotations
@@ -14,17 +14,28 @@ from functools import lru_cache
 from pathlib import Path
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 load_dotenv(REPO_ROOT / ".env")
 
 from backend.config.config_loader import CONFIG_DIR, ScoringWeights, load_scoring_weights  # noqa: E402
+from backend.models.candidate import JobOpening, WscEmployee  # noqa: E402
 from backend.models.pipeline_result import PipelineResult  # noqa: E402
 from backend.repositories.csv_repository import CsvRepository  # noqa: E402
 from backend.services.pipeline import run_pipeline  # noqa: E402
+from backend.utils.parsing import clean_str, split_list  # noqa: E402
+
+
+class JobPayload(BaseModel):
+    title: str
+    department: str
+    seniority: str
+    key_domains: list[str] = []
+    required_skills: list[str] = []
+    nice_to_have: list[str] = []
 
 DATA_DIR = REPO_ROOT / "recruitment-task" / "data"
 
@@ -39,7 +50,7 @@ app.add_middleware(
 
 
 def _serialize_score(score) -> dict:
-    """dataclasses.asdict() only serializes fields, not @property values — so
+    """dataclasses.asdict() only serializes fields, not @property values - so
     SubScore.weighted_score (a computed property) has to be added explicitly
     or the frontend silently gets `undefined` for it."""
     data = dataclasses.asdict(score)
@@ -95,6 +106,24 @@ def get_job(job_id: str):
     return dataclasses.asdict(jobs[job_id])
 
 
+@app.post("/api/jobs")
+def create_job(payload: JobPayload):
+    repo = CsvRepository(DATA_DIR)
+    job = JobOpening(job_id=repo.next_job_id(), **payload.model_dump())
+    repo.save_job(job)
+    _job_results_cached.cache_clear()
+    return dataclasses.asdict(job)
+
+
+@app.delete("/api/jobs/{job_id}")
+def delete_job(job_id: str):
+    repo = CsvRepository(DATA_DIR)
+    if not repo.delete_job(job_id):
+        raise HTTPException(404, f"Unknown job_id '{job_id}'")
+    _job_results_cached.cache_clear()
+    return {"deleted": job_id}
+
+
 @app.get("/api/jobs/{job_id}/candidates")
 def get_job_candidates(job_id: str):
     if job_id not in _all_jobs():
@@ -108,7 +137,7 @@ def get_job_candidates(job_id: str):
 
 @app.get("/api/candidates")
 def list_candidate_pool():
-    """Every candidate, each tagged with their best-matching job across all openings —
+    """Every candidate, each tagged with their best-matching job across all openings -
     the Candidate Pool table view (docs/02-product-specification.md)."""
     jobs = _all_jobs()
     best_by_candidate: dict[str, dict] = {}
@@ -119,7 +148,7 @@ def list_candidate_pool():
             current_best = best_by_candidate.get(key)
             if current_best is None or r.score.overall_score > current_best["score"]["overall_score"]:
                 entry = _serialize_result(r, i)
-                entry["best_matching_job"] = {"job_id": job.job_id, "title": job.title}
+                entry["best_matching_job"] = {"job_id": job.job_id, "title": job.title, "department": job.department}
                 best_by_candidate[key] = entry
     return list(best_by_candidate.values())
 
@@ -165,6 +194,46 @@ def list_employees():
     return [dataclasses.asdict(e) for e in employees.values()]
 
 
+REQUIRED_EMPLOYEE_COLUMNS = {"employee_id", "full_name", "title", "department", "linkedin_id"}
+
+
+@app.post("/api/employees/import")
+async def import_employees(file: UploadFile):
+    """Expects the same column schema as recruitment-task/data/wsc_employees.csv:
+    employee_id, full_name, title, department, linkedin_id, work_history (';'-separated).
+    Upserts by employee_id - re-importing a known employee updates their row."""
+    import pandas as pd
+    from io import BytesIO
+
+    raw = await file.read()
+    try:
+        df = pd.read_csv(BytesIO(raw))
+    except Exception as e:
+        raise HTTPException(400, f"Could not parse CSV: {e}") from e
+
+    missing = REQUIRED_EMPLOYEE_COLUMNS - set(df.columns)
+    if missing:
+        raise HTTPException(422, f"CSV is missing required columns: {sorted(missing)}")
+
+    employees = [
+        WscEmployee(
+            employee_id=clean_str(row.get("employee_id")),
+            full_name=clean_str(row.get("full_name")),
+            title=clean_str(row.get("title")),
+            department=clean_str(row.get("department")),
+            linkedin_id=clean_str(row.get("linkedin_id")),
+            work_history=split_list(row.get("work_history")),
+        )
+        for _, row in df.iterrows()
+        if clean_str(row.get("employee_id"))
+    ]
+
+    repo = CsvRepository(DATA_DIR)
+    count = repo.save_employees(employees)
+    _job_results_cached.cache_clear()  # mutual-connection scoring depends on the employee roster
+    return {"imported": count}
+
+
 @app.get("/api/settings/scoring-weights")
 def scoring_weights():
     return load_scoring_weights().model_dump()
@@ -172,7 +241,7 @@ def scoring_weights():
 
 @app.put("/api/settings/scoring-weights")
 def update_scoring_weights(payload: dict):
-    """Persists to backend/config/scoring_weights.json — the same file the CLI
+    """Persists to backend/config/scoring_weights.json - the same file the CLI
     and every other pipeline entry point reads, so an edit here changes every
     candidate's score everywhere, not just in this session (docs/00-project-
     constitution.md: "everything configurable, nothing hardcoded")."""
@@ -186,17 +255,17 @@ def update_scoring_weights(payload: dict):
     data["_comment"] = json.loads(path.read_text()).get("_comment", "")
     path.write_text(json.dumps(data, indent=2) + "\n")
 
-    _job_results_cached.cache_clear()  # weights changed — every cached ranking is now stale
+    _job_results_cached.cache_clear()  # weights changed - every cached ranking is now stale
     return weights.model_dump()
 
 
 @app.get("/api/settings/integrations")
 def integrations():
-    """Mocked connection status — docs/11-tradeoffs.md #4: the assumption in this
+    """Mocked connection status - docs/11-tradeoffs.md #4: the assumption in this
     MVP is that HubSpot/LinkedIn/Comeet access already exists, and today's actual
     data path is a CSV export from each, matching recruitment-task/data/*.csv."""
     return [
         {"name": "HubSpot", "status": "Connected", "mode": "CSV import (conference_attendees.csv)", "last_sync": "manual"},
         {"name": "LinkedIn", "status": "Connected", "mode": "CSV import (linkedin_profiles.csv)", "last_sync": "manual"},
-        {"name": "Comeet", "status": "Not connected", "mode": "Planned — ATS status flagging", "last_sync": "-"},
+        {"name": "Comeet", "status": "Not connected", "mode": "Planned - ATS status flagging", "last_sync": "-"},
     ]

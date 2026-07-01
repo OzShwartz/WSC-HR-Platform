@@ -30,11 +30,11 @@ export function Dashboard() {
         <KpiCard label="Conferences" value={data.conference_count} icon={Calendar} />
         <KpiCard
           label="Top Conference"
-          value={data.top_conference.name ?? '—'}
+          value={data.top_conference.name ?? '-'}
           sub={`${data.top_conference.count} attendees`}
           icon={Trophy}
         />
-        <KpiCard label="Most Requested Skill" value={data.most_requested_skill ?? '—'} icon={Sparkles} />
+        <KpiCard label="Most Requested Skill" value={data.most_requested_skill ?? '-'} icon={Sparkles} />
         <KpiCard label="Strong Matches" value={data.recommendation_counts['Strong Match'] ?? 0} icon={Award} />
         <KpiCard label="Do Not Contact" value={data.recommendation_counts['Do Not Contact'] ?? 0} icon={ThumbsDown} />
       </div>

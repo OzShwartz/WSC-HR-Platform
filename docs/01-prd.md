@@ -1,4 +1,4 @@
-# 01 — Product Requirements Document
+# 01 - Product Requirements Document
 
 **Version:** 1.0
 **Status:** MVP
@@ -14,7 +14,7 @@ Today, recruiters collect valuable contacts through business cards, handwritten 
 
 ### Product Vision
 
-Talent Intelligence Platform (TIP) is an AI-first internal recruitment platform designed to transform conference attendees into an intelligent, searchable, and continuously evolving talent pool. It combines deterministic business logic, explainable AI, and configurable scoring engines to help recruiters identify the best candidates within seconds — receiving transparent recommendations with AI reasoning and detailed score explanations, instead of manually reviewing hundreds of profiles.
+Talent Intelligence Platform (TIP) is an AI-first internal recruitment platform designed to transform conference attendees into an intelligent, searchable, and continuously evolving talent pool. It combines deterministic business logic, explainable AI, and configurable scoring engines to help recruiters identify the best candidates within seconds - receiving transparent recommendations with AI reasoning and detailed score explanations, instead of manually reviewing hundreds of profiles.
 
 The first version operates locally against CSV files, with an architecture designed to later connect to HubSpot, LinkedIn, Comeet, MCP servers, and cloud services (see [12-roadmap.md](12-roadmap.md)).
 
@@ -33,7 +33,7 @@ The first version operates locally against CSV files, with an architecture desig
 - Production-ready, modular architecture
 - Clean separation between AI and business logic
 - Support future cloud deployment and API integrations
-- No hardcoded logic — everything configurable
+- No hardcoded logic - everything configurable
 
 ### Success Metrics
 
@@ -50,9 +50,9 @@ The platform is successful when:
 
 Business cards disappear, recruiter notes differ in format and quality, information is inconsistent, and contacts become fragmented across notebooks, phones, and inboxes.
 
-### Candidate Quality — Signal vs. Noise
+### Candidate Quality - Signal vs. Noise
 
-Conference attendees are not necessarily relevant to the domain of the conference itself. A DevOps conference, for example, draws platform engineers, SREs, and cloud engineers — but also recruiters, sales engineers, IT managers, consultants, and vendors. Attendance alone says nothing about candidate quality. **The system must distinguish signal from noise automatically, without requiring a recruiter to screen every attendee by hand.**
+Conference attendees are not necessarily relevant to the domain of the conference itself. A DevOps conference, for example, draws platform engineers, SREs, and cloud engineers - but also recruiters, sales engineers, IT managers, consultants, and vendors. Attendance alone says nothing about candidate quality. **The system must distinguish signal from noise automatically, without requiring a recruiter to screen every attendee by hand.**
 
 ### Candidate Matching
 
@@ -72,17 +72,17 @@ This PRD is being executed against a specific take-home brief ([recruitment-task
 
 - **Input data** (`recruitment-task/data/`): `conference_attendees.csv` (75 contacts across 4 conferences), `linkedin_profiles.csv` (enrichment data with mutual-connection signal), `wsc_employees.csv` (current roster, used for mutual-connection and referral detection), `job_openings.csv` (active roles, each pipeline run is scoped to one `job_id`).
 - **Known data limitations to design around**: not every attendee has a matching LinkedIn profile; not every LinkedIn profile has mutual connections. The pipeline must degrade gracefully rather than fail or silently drop these contacts.
-- **Minimum required behavior**: accept a `job_id`, and produce a structured, recruiter-usable output ranking/flagging candidates for that role — runnable end-to-end against the CSVs, with `JOB001` (Senior ML Engineer) as the required demo case.
+- **Minimum required behavior**: accept a `job_id`, and produce a structured, recruiter-usable output ranking/flagging candidates for that role - runnable end-to-end against the CSVs, with `JOB001` (Senior ML Engineer) as the required demo case.
 
 Everything in [02-product-specification.md](02-product-specification.md) (Dashboard, full CRM-style Candidate Pool, Jobs module, Settings, AI Center) describes the **target-state platform** this MVP is a first slice of. The tradeoff between building that full slice vs. a focused pipeline for the take-home window is addressed explicitly in [11-tradeoffs.md](11-tradeoffs.md).
 
 ## 4. User Personas
 
-**Recruiter** (primary user) — registers conference attendees, searches the candidate pool, reviews AI recommendations, manages the talent pool, contacts candidates, maintains notes.
+**Recruiter** (primary user) - registers conference attendees, searches the candidate pool, reviews AI recommendations, manages the talent pool, contacts candidates, maintains notes.
 
-**HR Manager** — reviews recruitment performance and AI quality, configures scoring, analyzes hiring metrics, manages integrations.
+**HR Manager** - reviews recruitment performance and AI quality, configures scoring, analyzes hiring metrics, manages integrations.
 
-**Future Admin** — manages users, permissions, audit logs, integrations, knowledge base, and prompt versions.
+**Future Admin** - manages users, permissions, audit logs, integrations, knowledge base, and prompt versions.
 
 ## 5. User Journey
 
@@ -121,11 +121,11 @@ Five modules make up the target platform, detailed in [02-product-specification.
 Per the recruitment brief, these are the open questions any implementation must take a stated position on (answered concretely in [03-scoring-engine.md](03-scoring-engine.md) and [11-tradeoffs.md](11-tradeoffs.md)):
 
 1. How is "domain relevance" defined and detected per attendee, not just per conference?
-2. How is a contact with no LinkedIn match handled — filtered out, or kept with a lower-confidence indication?
+2. How is a contact with no LinkedIn match handled - filtered out, or kept with a lower-confidence indication?
 3. Does the *number* of mutual connections matter, or is any-vs-none sufficient?
-4. Should candidates already in the ATS (Comeet) — e.g. previously rejected — be flagged differently?
-5. What is the intended refresh cadence — one-time batch job, or run after every conference?
-6. Who triggers the pipeline in production — a recruiter manually, or an automated event (e.g. badge-scan export)?
+4. Should candidates already in the ATS (Comeet) - e.g. previously rejected - be flagged differently?
+5. What is the intended refresh cadence - one-time batch job, or run after every conference?
+6. Who triggers the pipeline in production - a recruiter manually, or an automated event (e.g. badge-scan export)?
 7. What privacy/GDPR considerations apply to storing and processing LinkedIn data at scale?
 
 ## 8. Acceptance Criteria (MVP)
@@ -145,4 +145,4 @@ The MVP is considered complete when:
 
 ## Final Design Philosophy
 
-TIP is not a simple recruitment dashboard — it is designed as an AI-native Talent Intelligence Operating System that combines deterministic engineering with explainable AI to create a trusted decision-support tool. Every recommendation is transparent, every score is configurable, every AI response is grounded, and every module is independently extensible. The architecture should evolve from a local CSV-based MVP into a cloud-native enterprise platform without a fundamental rewrite.
+TIP is not a simple recruitment dashboard - it is designed as an AI-native Talent Intelligence Operating System that combines deterministic engineering with explainable AI to create a trusted decision-support tool. Every recommendation is transparent, every score is configurable, every AI response is grounded, and every module is independently extensible. The architecture should evolve from a local CSV-based MVP into a cloud-native enterprise platform without a fundamental rewrite.

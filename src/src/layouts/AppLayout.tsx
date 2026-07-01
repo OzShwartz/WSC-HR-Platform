@@ -45,7 +45,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="mt-auto border-t border-neutral-100 px-5 py-4 text-[11px] text-neutral-400 dark:border-neutral-800 dark:text-neutral-600">
-          MVP — local CSV data
+          MVP - local CSV data
         </div>
       </aside>
       <main className="flex-1 overflow-y-auto">

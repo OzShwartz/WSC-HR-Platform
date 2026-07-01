@@ -1,4 +1,4 @@
-# 04 — AI Architecture
+# 04 - AI Architecture
 
 Implements the AI principles from [00-project-constitution.md](00-project-constitution.md): AI augments recruiter judgment, never replaces it, and every output is explainable.
 
@@ -15,19 +15,19 @@ Implements the AI principles from [00-project-constitution.md](00-project-consti
 
 Each agent has a single responsibility:
 
-- **Candidate Classification Agent** — identifies domain, seniority, normalizes titles, categorizes industry, extracts strengths, estimates confidence.
-- **Candidate Matching Agent** — compares candidates against jobs, computes semantic similarity, identifies missing skills, generates match explanations and improvement suggestions.
-- **Candidate Recommendation Agent** — generates recruiter recommendations, prioritizes outreach, highlights risk, explains candidate potential.
-- **Candidate Summary Service/Agent** — produces recruiter-friendly summaries, e.g. *"Senior Backend Engineer with 8 years of experience building distributed systems. Strong expertise in Go, Kubernetes and AWS. Previously worked at Wix and Monday. Excellent fit for Senior Platform Engineer. High confidence recommendation."*
-- **Candidate Comparison Service** — given candidates A/B/C and a target job, returns a ranking, strengths/weaknesses, a comparison matrix, and a hiring recommendation with reasoning.
-- **Explainability Agent** — answers, for every recommendation: Why was this candidate selected? Which information influenced it? Which requirements are missing? How confident is the AI?
-- **Dashboard/Executive Insights Agent** — generates aggregate insights: highest-quality conference, most valuable candidate source, most requested technologies, common hiring bottlenecks, candidates worth contacting today, hidden high-potential candidates.
-- **Validation Agent** — validates AI outputs, prevents hallucination, verifies required fields, checks reasoning quality, enforces confidence thresholds.
-- **Knowledge Agent** — retrieves relevant knowledge documents, provides context, supports grounding, selects few-shot examples, prepares the final AI context.
+- **Candidate Classification Agent** - identifies domain, seniority, normalizes titles, categorizes industry, extracts strengths, estimates confidence.
+- **Candidate Matching Agent** - compares candidates against jobs, computes semantic similarity, identifies missing skills, generates match explanations and improvement suggestions.
+- **Candidate Recommendation Agent** - generates recruiter recommendations, prioritizes outreach, highlights risk, explains candidate potential.
+- **Candidate Summary Service/Agent** - produces recruiter-friendly summaries, e.g. *"Senior Backend Engineer with 8 years of experience building distributed systems. Strong expertise in Go, Kubernetes and AWS. Previously worked at Wix and Monday. Excellent fit for Senior Platform Engineer. High confidence recommendation."*
+- **Candidate Comparison Service** - given candidates A/B/C and a target job, returns a ranking, strengths/weaknesses, a comparison matrix, and a hiring recommendation with reasoning.
+- **Explainability Agent** - answers, for every recommendation: Why was this candidate selected? Which information influenced it? Which requirements are missing? How confident is the AI?
+- **Dashboard/Executive Insights Agent** - generates aggregate insights: highest-quality conference, most valuable candidate source, most requested technologies, common hiring bottlenecks, candidates worth contacting today, hidden high-potential candidates.
+- **Validation Agent** - validates AI outputs, prevents hallucination, verifies required fields, checks reasoning quality, enforces confidence thresholds.
+- **Knowledge Agent** - retrieves relevant knowledge documents, provides context, supports grounding, selects few-shot examples, prepares the final AI context.
 
 ## AI Execution Pipeline
 
-Every AI request — regardless of which agent — follows the same pipeline:
+Every AI request - regardless of which agent - follows the same pipeline:
 
 ```
 User Request
@@ -62,7 +62,7 @@ Only relevant information is ever sent to the model:
 | Candidate Summary | Candidate + LinkedIn + Conference + Skills + target Job | The rest of the candidate pool |
 | Dashboard Insights | Aggregated statistics only | Every individual candidate profile |
 
-This is a cost and quality control, not just a cost control — smaller, targeted context produces more consistent output than dumping the entire dataset into the prompt.
+This is a cost and quality control, not just a cost control - smaller, targeted context produces more consistent output than dumping the entire dataset into the prompt.
 
 ## Grounding
 
@@ -92,7 +92,7 @@ Every AI output includes a confidence score, reasoning, evidence, source documen
 
 ## Model Independence
 
-The AI architecture must remain provider-agnostic. Supported future providers: OpenAI, Claude, Gemini, Azure OpenAI, and local models. Swapping providers must never require a business-logic change — this is enforced by keeping every LLM call behind the Business Service layer described in [05-system-architecture.md](05-system-architecture.md), never called directly from UI or scoring code.
+The AI architecture must remain provider-agnostic. Supported future providers: OpenAI, Claude, Gemini, Azure OpenAI, and local models. Swapping providers must never require a business-logic change - this is enforced by keeping every LLM call behind the Business Service layer described in [05-system-architecture.md](05-system-architecture.md), never called directly from UI or scoring code.
 
 ## Human-in-the-Loop
 
@@ -100,4 +100,4 @@ AI recommendations are advisory. Recruiters always make the final decision, and 
 
 ## Responsible AI
 
-Recommendations may only be influenced by professional qualifications — never age, gender, nationality, religion, ethnicity, or other protected characteristics.
+Recommendations may only be influenced by professional qualifications - never age, gender, nationality, religion, ethnicity, or other protected characteristics.

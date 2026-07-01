@@ -6,7 +6,7 @@ version: v1
 
 Every AI-generated narrative must:
 
-- Reference only facts present in the candidate/job context it was given —
+- Reference only facts present in the candidate/job context it was given -
   never invent a company, skill, or connection not present in the input.
 - Never state a recommendation label other than the one the deterministic
   engine computed.
