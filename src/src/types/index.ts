@@ -106,6 +106,15 @@ export interface ScoringWeights {
   recruiter_feedback: number
 }
 
+export interface Employee {
+  employee_id: string
+  full_name: string
+  title: string
+  department: string
+  linkedin_id: string
+  work_history: string[]
+}
+
 export interface Integration {
   name: string
   status: string

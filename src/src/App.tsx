@@ -4,6 +4,7 @@ import { Dashboard } from './pages/Dashboard'
 import { Jobs } from './pages/Jobs'
 import { JobDetail } from './pages/JobDetail'
 import { CandidatePool } from './pages/CandidatePool'
+import { Employees } from './pages/Employees'
 import { Settings } from './pages/Settings'
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/candidates" element={<CandidatePool />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/jobs/:jobId" element={<JobDetail />} />
+        <Route path="/employees" element={<Employees />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </AppLayout>

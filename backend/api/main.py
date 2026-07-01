@@ -8,6 +8,7 @@ logic lives here — see docs/07-development-standards.md ("Service Rules").
 from __future__ import annotations
 
 import dataclasses
+import json
 from collections import Counter
 from functools import lru_cache
 from pathlib import Path
@@ -15,11 +16,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import ValidationError
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 load_dotenv(REPO_ROOT / ".env")
 
-from backend.config.config_loader import load_scoring_weights  # noqa: E402
+from backend.config.config_loader import CONFIG_DIR, ScoringWeights, load_scoring_weights  # noqa: E402
 from backend.models.pipeline_result import PipelineResult  # noqa: E402
 from backend.repositories.csv_repository import CsvRepository  # noqa: E402
 from backend.services.pipeline import run_pipeline  # noqa: E402
@@ -157,9 +159,35 @@ def dashboard():
     }
 
 
+@app.get("/api/employees")
+def list_employees():
+    employees = CsvRepository(DATA_DIR).load_employees()
+    return [dataclasses.asdict(e) for e in employees.values()]
+
+
 @app.get("/api/settings/scoring-weights")
 def scoring_weights():
     return load_scoring_weights().model_dump()
+
+
+@app.put("/api/settings/scoring-weights")
+def update_scoring_weights(payload: dict):
+    """Persists to backend/config/scoring_weights.json — the same file the CLI
+    and every other pipeline entry point reads, so an edit here changes every
+    candidate's score everywhere, not just in this session (docs/00-project-
+    constitution.md: "everything configurable, nothing hardcoded")."""
+    try:
+        weights = ScoringWeights(**payload)
+    except ValidationError as e:
+        raise HTTPException(422, str(e)) from e
+
+    path = CONFIG_DIR / "scoring_weights.json"
+    data = weights.model_dump()
+    data["_comment"] = json.loads(path.read_text()).get("_comment", "")
+    path.write_text(json.dumps(data, indent=2) + "\n")
+
+    _job_results_cached.cache_clear()  # weights changed — every cached ranking is now stale
+    return weights.model_dump()
 
 
 @app.get("/api/settings/integrations")

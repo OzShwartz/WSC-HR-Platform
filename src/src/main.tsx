@@ -4,6 +4,12 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 
+const storedTheme = localStorage.getItem('tip-theme')
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+  document.documentElement.classList.add('dark')
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
