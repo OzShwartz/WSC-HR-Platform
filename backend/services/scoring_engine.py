@@ -17,6 +17,14 @@ from backend.models.score import ScoreBreakdown, SubScore
 
 _SENIOR_TITLE_MARKERS = ("vp", "vice president", "head", "director", "principal", "staff", "chief")
 
+# education and recruiter_feedback have no data source at all in this dataset (see
+# score_education/score_recruiter_feedback below) - they're permanently insufficient
+# for every candidate, not a per-candidate signal. Counting them in "confidence" would
+# subtract the same fixed amount from everyone and cap it at the same ceiling
+# regardless of how complete any individual candidate's actual data is - which is
+# exactly the bug this constant exists to avoid.
+_STRUCTURALLY_UNAVAILABLE_COMPONENTS = ("education", "recruiter_feedback")
+
 _WORD_RE = re.compile(r"[a-z0-9+#]+")
 
 
@@ -380,7 +388,14 @@ def score_candidate(
         s.weight = weight_map[s.name]
 
     overall = round(sum(s.weighted_score for s in sub_scores), 1)
-    confidence = round(sum(s.weight for s in sub_scores if not s.insufficient_data), 2)
+
+    confidence_eligible = [s for s in sub_scores if s.name not in _STRUCTURALLY_UNAVAILABLE_COMPONENTS]
+    eligible_weight_total = sum(s.weight for s in confidence_eligible)
+    confidence = (
+        round(sum(s.weight for s in confidence_eligible if not s.insufficient_data) / eligible_weight_total, 2)
+        if eligible_weight_total
+        else 0.0
+    )
     if candidate.linkedin is None:
         confidence = round(confidence * 0.7, 2)  # no enrichment at all - extra haircut
 

@@ -144,3 +144,30 @@ def test_referral_suggestion_prefers_same_department_over_just_seniority():
 def test_referral_suggestion_empty_when_no_connections():
     candidate = Candidate(attendee=_attendee("ML Engineer", linkedin_url=""), linkedin=None)
     assert best_referral_contact(candidate, JOB, EMPLOYEES) == ""
+
+
+def test_confidence_is_100_percent_when_every_available_field_is_present():
+    """education/recruiter_feedback have no data source at all (for anyone, ever) -
+    they must not drag every candidate's confidence down to the same fixed ceiling.
+    A candidate with a complete LinkedIn profile should read as fully confident."""
+    li = LinkedInProfile(
+        linkedin_url="li/complete",
+        full_name="Test Person",
+        current_company="Acme",
+        current_title="ML Engineer",
+        location="Tel Aviv",
+        years_experience=6,
+        top_skills=["Python", "PyTorch", "Computer Vision"],
+        industry="Computer Vision",
+        wsc_mutual_connections=["WSC002"],
+    )
+    candidate = Candidate(attendee=_attendee("ML Engineer", linkedin_url="li/complete"), linkedin=li)
+    score = score_candidate(candidate, JOB, EMPLOYEES, WEIGHTS, DOMAIN_SIGNALS, SENIORITY_BANDS)
+    assert score.confidence == 1.0
+
+
+def test_confidence_still_drops_without_a_linkedin_match():
+    """The actual case confidence is supposed to catch: no enrichment at all."""
+    candidate = Candidate(attendee=_attendee("ML Engineer", linkedin_url=""), linkedin=None)
+    score = score_candidate(candidate, JOB, EMPLOYEES, WEIGHTS, DOMAIN_SIGNALS, SENIORITY_BANDS)
+    assert score.confidence < 0.3
