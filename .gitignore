@@ -26,3 +26,6 @@ build/
 
 # Logs
 *.log
+
+# Raw screen recordings - only the compressed presentation/videos/*.mp4 versions are tracked
+presentation/videos/*.mov
