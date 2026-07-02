@@ -13,7 +13,7 @@ The repository is organized as:
 | [`recruitment-task/`](recruitment-task/) | The original assignment as received: task brief (`index.html`) and the mock source data (`data/*.csv`). Treated as read-only ground truth for scope and evaluation criteria. |
 | [`prds/`](prds/) | The structured design documentation this project is built against. Start here. |
 | [`backend/`](backend/) | The pipeline - repositories, deterministic scoring engine, AI agents, CLI runner, and a FastAPI layer over all of it (`backend/api/`). |
-| [`src/`](src/) | The React + TypeScript frontend - Dashboard, Candidate Pool, Jobs, Settings - consuming the FastAPI backend. |
+| [`src/`](src/) | The React + TypeScript frontend - Dashboard, Candidate Pool, Jobs, WSC Team, Settings - consuming the FastAPI backend. |
 | [`brand/`](brand/) | WSC Sports brand reference (logo, colors). |
 | [`output/`](output/) | Generated CSV/HTML outputs per job (checked in per the "Output CSV" deliverable). |
 
@@ -21,9 +21,17 @@ The repository is organized as:
 
 Working end-to-end: CLI pipeline, FastAPI backend, and a React app with all four pages from [02-product-specification.md](prds/02-product-specification.md) (Dashboard, Candidate Pool, Jobs, Settings) reading live from the scoring engine. Not yet built: candidate registration form, auth/RBAC, and the live integrations - those are [12-roadmap.md](prds/12-roadmap.md) Phase 2+.
 
+## Executive Summary (for a non-technical reader)
+
+Every year, WSC Sports' recruiters meet strong engineering and product candidates at industry conferences - and lose almost all of them within days. There's no system that remembers who they met, and no easy way to tell, out of a crowd that includes plenty of vendors and sales reps alongside real engineers, who's actually worth a follow-up call.
+
+This project turns that lost opportunity into a working, on-demand talent pool. Every conference contact is automatically scored against open roles using signals that are hard to fake - do their actual skills and title match the domain, not just the conference they happened to attend? Do they already know someone at WSC? - and every recommendation comes with a plain-language explanation of why, never a black-box number a recruiter has to take on faith.
+
+Running it once against a real open role (Senior ML Engineer) shows the value directly: out of 75 people who showed up at conferences, the system confidently flags 4 as strong matches and rules out 30 as clearly the wrong fit - work that would otherwise mean a recruiter manually re-reading 75 LinkedIn profiles every time a role opens. That's conference ROI you can actually measure, and candidates you've already met who stop falling through the cracks.
+
 ## Documentation Index
 
-| Doc | What it covers |
+| PRD | What it covers |
 |---|---|
 | [00 - Project Constitution](prds/00-project-constitution.md) | The non-negotiable principles: AI assists, never decides; determinism is the source of truth; every AI output is explainable. |
 | [01 - Product Requirements Document](prds/01-prd.md) | Background, business problem, vision, goals, personas, user journey, acceptance criteria. |
@@ -47,7 +55,7 @@ Per [recruitment-task/index.html](recruitment-task/index.html) §4:
 - [x] Output CSV for `JOB001` (Senior ML Engineer) - [output/JOB001_candidates.csv](output/JOB001_candidates.csv)
 - [x] Design document - see [prds/](prds/), particularly [01-prd.md](prds/01-prd.md) and [11-tradeoffs.md](prds/11-tradeoffs.md)
 - [x] Stated assumptions - see [03-scoring-engine.md](prds/03-scoring-engine.md) §Edge Cases & Assumptions and [11-tradeoffs.md](prds/11-tradeoffs.md)
-- [ ] Executive summary for a non-technical audience
+- [x] Executive summary for a non-technical audience - see above
 
 ## Running the Pipeline
 
