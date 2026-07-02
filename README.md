@@ -17,8 +17,6 @@ The repository is organized as:
 | [`brand/`](brand/) | WSC Sports brand reference (logo, colors). |
 | [`output/`](output/) | Generated CSV/HTML outputs per job (checked in per the "Output CSV" deliverable). |
 
-> **Note:** this repo also once had a separate `PRDs/` folder containing the original raw, unstructured design notes (`prd0.md`-`prd4.md`) that this structured doc set was built from. That raw-notes folder disappeared from disk outside of any action taken here, well before `docs/` was later renamed to `prds/` below - the similar name is a coincidence of that rename, not a sign the original files came back. Their content is fully preserved in `prds/`, but the original raw files themselves are still gone.
-
 ## Status
 
 Working end-to-end: CLI pipeline, FastAPI backend, and a React app with all four pages from [02-product-specification.md](prds/02-product-specification.md) (Dashboard, Candidate Pool, Jobs, Settings) reading live from the scoring engine. Not yet built: candidate registration form, auth/RBAC, and the live integrations - those are [12-roadmap.md](prds/12-roadmap.md) Phase 2+.
