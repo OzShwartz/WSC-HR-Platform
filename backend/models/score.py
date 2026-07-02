@@ -34,7 +34,7 @@ class ScoreBreakdown:
     strengths: list[str]
     weaknesses: list[str]
     missing_skills: list[str]
-    referral_suggestion: str = ""  # deterministic "who to ask for a warm intro" — see scoring_engine.best_referral_contact
+    referral_suggestion: str = ""  # deterministic "who to ask for a warm intro" - see scoring_engine.best_referral_contact
 
     def sub_score(self, name: str) -> SubScore:
         for s in self.sub_scores:

@@ -45,7 +45,7 @@ export function JobFormModal({ onClose, onSaved }: { onClose: () => void; onSave
     }
   }
 
-  // The X button must always be able to dismiss the modal — if the form isn't
+  // The X button must always be able to dismiss the modal - if the form isn't
   // valid yet, "close" just cancels (no partial job gets created); if it is
   // valid, closing saves it, same as clicking Save Job.
   function handleCloseIconClick() {
