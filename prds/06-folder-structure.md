@@ -22,7 +22,7 @@ src/
   utils/          # pure helper functions
   assets/         # static assets
   tests/          # frontend test suites - 08-testing-strategy.md
-  docs/           # this documentation set
+  prds/           # this documentation set
 
 backend/
   api/            # FastAPI route definitions (API Layer)

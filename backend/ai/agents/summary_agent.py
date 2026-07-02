@@ -1,9 +1,9 @@
-"""Candidate Summary Agent - docs/04-ai-architecture.md.
+"""Candidate Summary Agent - prds/04-ai-architecture.md.
 
 Produces a short recruiter-facing summary. Uses an LLM if one is configured
 (backend/ai/llm_client.py); otherwise falls back to a deterministic template
 built directly from the candidate/LinkedIn/job fields, so the pipeline never
-depends on an API key to run end-to-end (docs/00-project-constitution.md).
+depends on an API key to run end-to-end (prds/00-project-constitution.md).
 """
 
 from __future__ import annotations

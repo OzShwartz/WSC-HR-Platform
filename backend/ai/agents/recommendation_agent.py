@@ -1,8 +1,8 @@
-"""Candidate Recommendation Agent - docs/04-ai-architecture.md.
+"""Candidate Recommendation Agent - prds/04-ai-architecture.md.
 
 Narrates the ScoreBreakdown the deterministic scoring engine already
 produced. This agent NEVER changes the recommendation label or the score -
-it only explains them (docs/00-project-constitution.md). If validation of
+it only explains them (prds/00-project-constitution.md). If validation of
 the LLM output ever detected a different recommendation label than the one
 computed, that output would be rejected; the fallback template is immune to
 this by construction since it's built directly from the same ScoreBreakdown.

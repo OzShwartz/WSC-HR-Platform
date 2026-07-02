@@ -1,7 +1,7 @@
-"""Loads prompt templates from backend/ai/prompts/*.md - docs/09-prompt-strategy.md.
+"""Loads prompt templates from backend/ai/prompts/*.md - prds/09-prompt-strategy.md.
 
 Prompts are plain Markdown, not Python strings, so they can be edited and
-reviewed independently of the code that calls them (docs/00-project-constitution.md
+reviewed independently of the code that calls them (prds/00-project-constitution.md
 rule #9). Each file has a YAML-ish frontmatter block with a `version`, a
 `# System` section, and a `# User Prompt Template` section with `{field}`
 placeholders filled via `str.format(**context)`.

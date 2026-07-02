@@ -1,9 +1,9 @@
-"""Model-agnostic LLM client abstraction - docs/04-ai-architecture.md ("Model Independence").
+"""Model-agnostic LLM client abstraction - prds/04-ai-architecture.md ("Model Independence").
 
 Business/AI services never import openai/anthropic directly - they call
 `get_llm_client()` and get back either a working client or None. None means
 "no key configured," and every agent in backend/ai/agents/ must have a
-deterministic fallback for that case (docs/00-project-constitution.md: the
+deterministic fallback for that case (prds/00-project-constitution.md: the
 pipeline must work end-to-end with zero external API keys).
 
 Swapping providers, or adding a new one, means editing this file only.

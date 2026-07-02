@@ -11,35 +11,35 @@ The repository is organized as:
 | Folder | Contents |
 |---|---|
 | [`recruitment-task/`](recruitment-task/) | The original assignment as received: task brief (`index.html`) and the mock source data (`data/*.csv`). Treated as read-only ground truth for scope and evaluation criteria. |
-| [`docs/`](docs/) | The structured design documentation this project is built against. Start here. |
+| [`prds/`](prds/) | The structured design documentation this project is built against. Start here. |
 | [`backend/`](backend/) | The pipeline - repositories, deterministic scoring engine, AI agents, CLI runner, and a FastAPI layer over all of it (`backend/api/`). |
 | [`src/`](src/) | The React + TypeScript frontend - Dashboard, Candidate Pool, Jobs, Settings - consuming the FastAPI backend. |
 | [`brand/`](brand/) | WSC Sports brand reference (logo, colors). |
 | [`output/`](output/) | Generated CSV/HTML outputs per job (checked in per the "Output CSV" deliverable). |
 
-> **Note:** a `PRDs/` folder with the raw design notes this project started from existed earlier in this repo's history but disappeared from disk outside of any action taken here - its content is fully preserved in `docs/`, but the original files themselves are gone.
+> **Note:** this repo also once had a separate `PRDs/` folder containing the original raw, unstructured design notes (`prd0.md`-`prd4.md`) that this structured doc set was built from. That raw-notes folder disappeared from disk outside of any action taken here, well before `docs/` was later renamed to `prds/` below - the similar name is a coincidence of that rename, not a sign the original files came back. Their content is fully preserved in `prds/`, but the original raw files themselves are still gone.
 
 ## Status
 
-Working end-to-end: CLI pipeline, FastAPI backend, and a React app with all four pages from [02-product-specification.md](docs/02-product-specification.md) (Dashboard, Candidate Pool, Jobs, Settings) reading live from the scoring engine. Not yet built: candidate registration form, auth/RBAC, and the live integrations - those are [12-roadmap.md](docs/12-roadmap.md) Phase 2+.
+Working end-to-end: CLI pipeline, FastAPI backend, and a React app with all four pages from [02-product-specification.md](prds/02-product-specification.md) (Dashboard, Candidate Pool, Jobs, Settings) reading live from the scoring engine. Not yet built: candidate registration form, auth/RBAC, and the live integrations - those are [12-roadmap.md](prds/12-roadmap.md) Phase 2+.
 
 ## Documentation Index
 
 | Doc | What it covers |
 |---|---|
-| [00 - Project Constitution](docs/00-project-constitution.md) | The non-negotiable principles: AI assists, never decides; determinism is the source of truth; every AI output is explainable. |
-| [01 - Product Requirements Document](docs/01-prd.md) | Background, business problem, vision, goals, personas, user journey, acceptance criteria. |
-| [02 - Product Specification](docs/02-product-specification.md) | Module-by-module functional spec: Dashboard, Conference Registration, Candidate Pool, Jobs, Settings. |
-| [03 - Scoring Engine](docs/03-scoring-engine.md) | The deterministic candidate-scoring model: components, weights, formulas, edge-case handling. |
-| [04 - AI Architecture](docs/04-ai-architecture.md) | AI services/agents, execution pipeline, guardrails, validation, confidence, model independence. |
-| [05 - System Architecture](docs/05-system-architecture.md) | Layered technical architecture, stack, storage, integrations, logging, error handling. |
-| [06 - Folder Structure](docs/06-folder-structure.md) | Repository/codebase layout for the implementation. |
-| [07 - Development Standards](docs/07-development-standards.md) | Naming, component/service rules, configuration-over-hardcoding. |
-| [08 - Testing Strategy](docs/08-testing-strategy.md) | Test types, golden dataset, CI/CD pipeline. |
-| [09 - Prompt Strategy](docs/09-prompt-strategy.md) | Prompt categories, context-window discipline, grounding, few-shot strategy. |
-| [10 - Knowledge Base](docs/10-knowledge-base.md) | The externalized knowledge documents that ground every AI call. |
-| [11 - Tradeoffs](docs/11-tradeoffs.md) | Key design tradeoffs and why this scope was chosen for a 1–2 day task. |
-| [12 - Roadmap](docs/12-roadmap.md) | Phased plan from local MVP to cloud-native platform with live integrations. |
+| [00 - Project Constitution](prds/00-project-constitution.md) | The non-negotiable principles: AI assists, never decides; determinism is the source of truth; every AI output is explainable. |
+| [01 - Product Requirements Document](prds/01-prd.md) | Background, business problem, vision, goals, personas, user journey, acceptance criteria. |
+| [02 - Product Specification](prds/02-product-specification.md) | Module-by-module functional spec: Dashboard, Conference Registration, Candidate Pool, Jobs, Settings. |
+| [03 - Scoring Engine](prds/03-scoring-engine.md) | The deterministic candidate-scoring model: components, weights, formulas, edge-case handling. |
+| [04 - AI Architecture](prds/04-ai-architecture.md) | AI services/agents, execution pipeline, guardrails, validation, confidence, model independence. |
+| [05 - System Architecture](prds/05-system-architecture.md) | Layered technical architecture, stack, storage, integrations, logging, error handling. |
+| [06 - Folder Structure](prds/06-folder-structure.md) | Repository/codebase layout for the implementation. |
+| [07 - Development Standards](prds/07-development-standards.md) | Naming, component/service rules, configuration-over-hardcoding. |
+| [08 - Testing Strategy](prds/08-testing-strategy.md) | Test types, golden dataset, CI/CD pipeline. |
+| [09 - Prompt Strategy](prds/09-prompt-strategy.md) | Prompt categories, context-window discipline, grounding, few-shot strategy. |
+| [10 - Knowledge Base](prds/10-knowledge-base.md) | The externalized knowledge documents that ground every AI call. |
+| [11 - Tradeoffs](prds/11-tradeoffs.md) | Key design tradeoffs and why this scope was chosen for a 1–2 day task. |
+| [12 - Roadmap](prds/12-roadmap.md) | Phased plan from local MVP to cloud-native platform with live integrations. |
 
 ## Recruitment Task Deliverables Checklist
 
@@ -47,8 +47,8 @@ Per [recruitment-task/index.html](recruitment-task/index.html) §4:
 
 - [x] Working pipeline code, runnable against the provided CSVs, with setup instructions - see below
 - [x] Output CSV for `JOB001` (Senior ML Engineer) - [output/JOB001_candidates.csv](output/JOB001_candidates.csv)
-- [x] Design document - see [docs/](docs/), particularly [01-prd.md](docs/01-prd.md) and [11-tradeoffs.md](docs/11-tradeoffs.md)
-- [x] Stated assumptions - see [03-scoring-engine.md](docs/03-scoring-engine.md) §Edge Cases & Assumptions and [11-tradeoffs.md](docs/11-tradeoffs.md)
+- [x] Design document - see [prds/](prds/), particularly [01-prd.md](prds/01-prd.md) and [11-tradeoffs.md](prds/11-tradeoffs.md)
+- [x] Stated assumptions - see [03-scoring-engine.md](prds/03-scoring-engine.md) §Edge Cases & Assumptions and [11-tradeoffs.md](prds/11-tradeoffs.md)
 - [ ] Executive summary for a non-technical audience
 
 ## Running the Pipeline
@@ -69,7 +69,7 @@ python -m backend.run_pipeline --job-id JOB001 --html
 
 This writes `output/JOB001_candidates.csv` (the required deliverable) and, with `--html`, a branded recruiter-facing summary at `output/JOB001_report.html`. Swap `JOB001` for `JOB002`/`JOB003`/`JOB004` to try other openings.
 
-Run the test suite (scoring-engine edge cases - docs/08-testing-strategy.md):
+Run the test suite (scoring-engine edge cases - prds/08-testing-strategy.md):
 
 ```bash
 python -m pytest backend/tests/
@@ -77,7 +77,7 @@ python -m pytest backend/tests/
 
 ### How the AI layer behaves without a key
 
-Every AI narrative (candidate summary, recommendation explanation) is generated by an LLM if `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` is set in `.env`, and falls back to a deterministic template built directly from the same score breakdown if not. The `ai_source` column in the output CSV shows which path was used for each row. The deterministic scoring itself (`overall_score`, `recommendation`) never depends on an LLM either way - see [docs/00-project-constitution.md](docs/00-project-constitution.md).
+Every AI narrative (candidate summary, recommendation explanation) is generated by an LLM if `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` is set in `.env`, and falls back to a deterministic template built directly from the same score breakdown if not. The `ai_source` column in the output CSV shows which path was used for each row. The deterministic scoring itself (`overall_score`, `recommendation`) never depends on an LLM either way - see [prds/00-project-constitution.md](prds/00-project-constitution.md).
 
 ## Running the Full App (backend API + frontend)
 
@@ -99,4 +99,4 @@ Open **http://localhost:5173**. The Vite dev server proxies `/api/*` to `localho
 - **Dashboard** (`/`) - KPIs and top candidates across all jobs
 - **Candidate Pool** (`/candidates`) - every attendee, tagged with their best-matching job; click a row for the full score breakdown + AI summary
 - **Jobs** (`/jobs`, `/jobs/:jobId`) - open roles, each with its own ranked candidate table
-- **Settings** (`/settings`) - live scoring weights from `backend/config/scoring_weights.json`, and mocked integration status (docs/11-tradeoffs.md #4)
+- **Settings** (`/settings`) - live scoring weights from `backend/config/scoring_weights.json`, and mocked integration status (prds/11-tradeoffs.md #4)

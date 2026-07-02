@@ -1,4 +1,4 @@
-"""Score models - the explainability contract from docs/00-project-constitution.md.
+"""Score models - the explainability contract from prds/00-project-constitution.md.
 
 Every sub-score and the overall score carry raw value, weight, reasoning,
 evidence, and a flag for whether the underlying data was actually available

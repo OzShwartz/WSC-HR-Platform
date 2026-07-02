@@ -1,6 +1,6 @@
 """Loads externally-editable scoring/domain configuration.
 
-Per docs/00-project-constitution.md ("everything configurable, nothing
+Per prds/00-project-constitution.md ("everything configurable, nothing
 hardcoded"), the scoring weights and the domain signal-vs-noise vocabulary
 live in plain JSON files in this folder, not as literals in the scoring
 engine. This module is the only place that reads them.

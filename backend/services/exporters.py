@@ -1,7 +1,7 @@
 """Turns pipeline results into the two required deliverables:
 a recruiter-usable CSV, and (bonus) a branded HTML summary view.
 
-docs/01-prd.md §"Define the output": the output must be structured and usable
+prds/01-prd.md §"Define the output": the output must be structured and usable
 by a recruiter without additional processing - every column here is meant to
 be read directly, not post-processed.
 """

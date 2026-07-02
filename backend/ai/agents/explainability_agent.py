@@ -1,4 +1,4 @@
-"""Explainability Agent - docs/04-ai-architecture.md.
+"""Explainability Agent - prds/04-ai-architecture.md.
 
 Unlike the summary and recommendation agents, this one never calls an LLM at
 all: "why was this candidate scored this way" is already fully captured in

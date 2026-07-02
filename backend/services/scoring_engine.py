@@ -1,7 +1,7 @@
-"""Deterministic candidate scoring engine - docs/03-scoring-engine.md.
+"""Deterministic candidate scoring engine - prds/03-scoring-engine.md.
 
 Everything here is plain arithmetic and string matching. No LLM call happens
-in this module, ever - per docs/00-project-constitution.md, "AI never
+in this module, ever - per prds/00-project-constitution.md, "AI never
 calculates scores, it only explains them." The AI layer (backend/ai/) takes
 the ScoreBreakdown this module produces and narrates it; it never overrides
 the numbers.
@@ -83,7 +83,7 @@ def _overlap_ratio(candidate_terms: set[str], target_terms: set[str]) -> float:
 def compute_domain_relevance(
     candidate: Candidate, job: JobOpening, domain_signals: DomainSignals
 ) -> tuple[float, str, list[str]]:
-    """The signal-vs-noise gate (docs/03-scoring-engine.md).
+    """The signal-vs-noise gate (prds/03-scoring-engine.md).
 
     Returns (multiplier in [0.1, 1.0], human-readable reasoning, evidence).
     The multiplier dampens Title/Skills/Industry sub-scores so that superficial

@@ -1,6 +1,6 @@
 """Repository layer - the only place in the codebase that knows about CSV files.
 
-Per docs/06-folder-structure.md, swapping CSV for HubSpot/LinkedIn/Comeet APIs
+Per prds/06-folder-structure.md, swapping CSV for HubSpot/LinkedIn/Comeet APIs
 or a real database later should mean rewriting this file, not the services or
 scoring engine that consume it. Every read method returns plain domain models
 (backend/models/candidate.py), never raw pandas rows.
@@ -27,7 +27,7 @@ class CsvRepository:
 
     In production this class is replaced by HubSpotRepository /
     LinkedInRepository / ComeetRepository implementations behind the same
-    read interface - see docs/11-tradeoffs.md #4.
+    read interface - see prds/11-tradeoffs.md #4.
     """
 
     def __init__(self, data_dir: str | Path):
@@ -162,7 +162,7 @@ class CsvRepository:
 
     def save_employees(self, employees: list[WscEmployee]) -> int:
         """Upsert a batch of employees (by employee_id) into wsc_employees.csv.
-        Used by the CSV import feature - see docs/11-tradeoffs.md #4 on assuming
+        Used by the CSV import feature - see prds/11-tradeoffs.md #4 on assuming
         HubSpot/LinkedIn/Comeet access already exists and today's actual data
         path being a CSV export from each system."""
         existing = self.load_employees()

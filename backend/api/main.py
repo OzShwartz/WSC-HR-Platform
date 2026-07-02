@@ -1,8 +1,8 @@
-"""FastAPI layer over the Core pipeline - docs/05-system-architecture.md.
+"""FastAPI layer over the Core pipeline - prds/05-system-architecture.md.
 
 This is a thin translation layer: every route calls into backend/services/
 (the same pipeline the CLI uses) and serializes the result. No scoring or AI
-logic lives here - see docs/07-development-standards.md ("Service Rules").
+logic lives here - see prds/07-development-standards.md ("Service Rules").
 """
 
 from __future__ import annotations
@@ -138,7 +138,7 @@ def get_job_candidates(job_id: str):
 @app.get("/api/candidates")
 def list_candidate_pool():
     """Every candidate, each tagged with their best-matching job across all openings -
-    the Candidate Pool table view (docs/02-product-specification.md)."""
+    the Candidate Pool table view (prds/02-product-specification.md)."""
     jobs = _all_jobs()
     best_by_candidate: dict[str, dict] = {}
     for job_id in jobs:
@@ -284,7 +284,7 @@ def scoring_weights():
 def update_scoring_weights(payload: dict):
     """Persists to backend/config/scoring_weights.json - the same file the CLI
     and every other pipeline entry point reads, so an edit here changes every
-    candidate's score everywhere, not just in this session (docs/00-project-
+    candidate's score everywhere, not just in this session (prds/00-project-
     constitution.md: "everything configurable, nothing hardcoded")."""
     try:
         weights = ScoringWeights(**payload)
@@ -302,7 +302,7 @@ def update_scoring_weights(payload: dict):
 
 @app.get("/api/settings/integrations")
 def integrations():
-    """Mocked connection status - docs/11-tradeoffs.md #4: the assumption in this
+    """Mocked connection status - prds/11-tradeoffs.md #4: the assumption in this
     MVP is that HubSpot/LinkedIn/Comeet access already exists, and today's actual
     data path is a CSV export from each, matching recruitment-task/data/*.csv."""
     return [
