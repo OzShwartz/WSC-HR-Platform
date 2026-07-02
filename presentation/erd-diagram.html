@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; }
+  .canvas { position: relative; width: 1560px; height: 1120px; background:
+    linear-gradient(#f3f4f6 1px, transparent 1px), linear-gradient(90deg, #f3f4f6 1px, transparent 1px);
+    background-size: 24px 24px; background-color: #ffffff;
+  }
+  .banner {
+    position: absolute; top: 20px; left: 24px; right: 24px; background: #0B0B0B; color: #D0F200;
+    padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .legend {
+    position: absolute; top: 66px; left: 24px; display: flex; gap: 18px; font-size: 12px; color: #374151;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend .pk { background:#eab308; color:#111; font-size:9px; font-weight:800; padding:1px 6px; border-radius:4px; }
+  .legend .fk { background:#2563eb; color:#fff; font-size:9px; font-weight:800; padding:1px 6px; border-radius:4px; }
+
+  .table-box {
+    position: absolute; border-radius: 10px; border: 1.5px solid #d1d5db; background: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08); overflow: hidden;
+  }
+  .table-box.junction { border-color: #d97706; }
+  .table-header {
+    background: #111827; color: #fff; font-size: 13.5px; font-weight: 800; padding: 9px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .junction .table-header { background: #b45309; }
+  .table-header .src { font-size: 9.5px; font-weight: 600; opacity: 0.6; text-transform: none; }
+  .table-row {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    padding: 5px 14px; border-bottom: 1px solid #f1f5f9; font-size: 12px;
+  }
+  .table-row:last-child { border-bottom: none; }
+  .field-name { display: flex; align-items: center; gap: 6px; color: #111827; font-weight: 600; }
+  .field-type { color: #9ca3af; font-size: 11px; white-space: nowrap; }
+  .pk { background:#eab308; color:#111; font-size:9px; font-weight:800; padding:1px 6px; border-radius:4px; }
+  .fk { background:#2563eb; color:#fff; font-size:9px; font-weight:800; padding:1px 6px; border-radius:4px; }
+
+  .rel-label {
+    position: absolute; background: #fff; padding: 2px 8px; font-size: 11.5px; font-weight: 700;
+    border-radius: 6px; border: 1px solid #e5e7eb; color: #374151;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="banner">ERD - Talent Intelligence Platform (proposed relational schema)</div>
+  <div class="legend">
+    <span><span class="pk">PK</span> primary key</span>
+    <span><span class="fk">FK</span> foreign key</span>
+    <span style="color:#b45309; font-weight:700;">■ orange header = new/proposed table (not an existing CSV)</span>
+  </div>
+
+  <!-- candidates -->
+  <div class="table-box" style="left:60px; top:110px; width:300px;">
+    <div class="table-header"><span>candidates</span><span class="src">conference_attendees.csv</span></div>
+    <div class="table-row"><span class="field-name"><span class="pk">PK</span> hubspot_id</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">full_name</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">email</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">company</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">title</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">conference_name</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">conference_domain</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">conference_date</span><span class="field-type">date</span></div>
+    <div class="table-row"><span class="field-name">source</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">notes</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name"><span class="fk">FK</span> linkedin_url</span><span class="field-type">text, null</span></div>
+  </div>
+
+  <!-- linkedin_profiles -->
+  <div class="table-box" style="left:460px; top:110px; width:300px;">
+    <div class="table-header"><span>linkedin_profiles</span><span class="src">linkedin_profiles.csv</span></div>
+    <div class="table-row"><span class="field-name"><span class="pk">PK</span> linkedin_url</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">full_name</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">current_company</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">current_title</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">location</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">years_experience</span><span class="field-type">numeric, null</span></div>
+    <div class="table-row"><span class="field-name">top_skills</span><span class="field-type">text[]</span></div>
+    <div class="table-row"><span class="field-name">industry</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">past_companies</span><span class="field-type">text[]</span></div>
+    <div class="table-row"><span class="field-name">past_titles</span><span class="field-type">text[]</span></div>
+  </div>
+
+  <!-- wsc_employees -->
+  <div class="table-box" style="left:930px; top:110px; width:280px;">
+    <div class="table-header"><span>wsc_employees</span><span class="src">wsc_employees.csv</span></div>
+    <div class="table-row"><span class="field-name"><span class="pk">PK</span> employee_id</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">full_name</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">title</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">department</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">linkedin_id</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">work_history</span><span class="field-type">text[]</span></div>
+  </div>
+
+  <!-- mutual_connections junction -->
+  <div class="table-box junction" style="left:700px; top:470px; width:280px;">
+    <div class="table-header"><span>mutual_connections</span><span class="src">new - bridge table</span></div>
+    <div class="table-row"><span class="field-name"><span class="pk">PK</span><span class="fk">FK</span> linkedin_url</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name"><span class="pk">PK</span><span class="fk">FK</span> employee_id</span><span class="field-type">text</span></div>
+  </div>
+
+  <!-- job_openings -->
+  <div class="table-box" style="left:60px; top:600px; width:300px;">
+    <div class="table-header"><span>job_openings</span><span class="src">job_openings.csv</span></div>
+    <div class="table-row"><span class="field-name"><span class="pk">PK</span> job_id</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">title</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">department</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">seniority</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">key_domains</span><span class="field-type">text[]</span></div>
+    <div class="table-row"><span class="field-name">required_skills</span><span class="field-type">text[]</span></div>
+    <div class="table-row"><span class="field-name">nice_to_have</span><span class="field-type">text[]</span></div>
+  </div>
+
+  <!-- candidate_job_scores junction -->
+  <div class="table-box junction" style="left:460px; top:660px; width:320px;">
+    <div class="table-header"><span>candidate_job_scores</span><span class="src">new - scores cache</span></div>
+    <div class="table-row"><span class="field-name"><span class="pk">PK</span><span class="fk">FK</span> hubspot_id</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name"><span class="pk">PK</span><span class="fk">FK</span> job_id</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">overall_score</span><span class="field-type">numeric</span></div>
+    <div class="table-row"><span class="field-name">recommendation</span><span class="field-type">text</span></div>
+    <div class="table-row"><span class="field-name">confidence</span><span class="field-type">numeric</span></div>
+    <div class="table-row"><span class="field-name">computed_at</span><span class="field-type">timestamp</span></div>
+  </div>
+
+  <!-- connectors -->
+  <svg style="position:absolute; left:0; top:0; width:1560px; height:1120px; pointer-events:none;">
+    <defs>
+      <marker id="tick1" markerWidth="10" markerHeight="10"><line x1="5" y1="0" x2="5" y2="10" stroke="#374151" stroke-width="1.6"/></marker>
+    </defs>
+    <!-- candidates <-> linkedin_profiles (1 : 0..1) -->
+    <line x1="360" y1="290" x2="458" y2="200" stroke="#1d4ed8" stroke-width="2" />
+    <!-- linkedin_profiles <-> mutual_connections (1 : N) -->
+    <line x1="650" y1="380" x2="790" y2="468" stroke="#d97706" stroke-width="2" />
+    <!-- wsc_employees <-> mutual_connections (1 : N) -->
+    <line x1="1050" y1="302" x2="900" y2="468" stroke="#d97706" stroke-width="2" />
+    <!-- candidates <-> candidate_job_scores (1 : N) -->
+    <line x1="150" y1="432" x2="490" y2="658" stroke="#1d4ed8" stroke-width="2" />
+    <!-- job_openings <-> candidate_job_scores (1 : N) -->
+    <line x1="360" y1="740" x2="458" y2="740" stroke="#d97706" stroke-width="2" />
+  </svg>
+
+  <div class="rel-label" style="left:355px; top:230px;">1 &nbsp;-&nbsp; 0..1</div>
+  <div class="rel-label" style="left:660px; top:415px;">1 &nbsp;-&nbsp; N</div>
+  <div class="rel-label" style="left:945px; top:375px;">1 &nbsp;-&nbsp; N</div>
+  <div class="rel-label" style="left:230px; top:530px;">1 &nbsp;-&nbsp; N</div>
+  <div class="rel-label" style="left:370px; top:718px;">1 &nbsp;-&nbsp; N</div>
+
+  <div class="rel-label" style="left:820px; top:560px; background:#fff7ed; border-color:#fdba74; color:#9a3412;">linkedin_profiles &#8596; wsc_employees<br/>is really M : N - normalized via mutual_connections</div>
+  <div class="rel-label" style="left:820px; top:730px; background:#fff7ed; border-color:#fdba74; color:#9a3412;">candidates &#8596; job_openings<br/>is really M : N - normalized via candidate_job_scores</div>
+
+</div>
+</body>
+</html>
