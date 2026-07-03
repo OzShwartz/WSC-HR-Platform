@@ -112,11 +112,11 @@ Open **http://localhost:5173**. The Vite dev server proxies `/api/*` to `localho
 
 **Opening a job posting and reviewing its ranked candidates**
 
-<video src="presentation/videos/jobs_flow.mp4" controls width="700"></video>
+![Opening a job posting and reviewing its ranked candidates](presentation/gifs/jobs_flow.gif)
 
 **Clicking a WSC employee to see who they're connected to in the candidate pool**
 
-<video src="presentation/videos/team_connections.mp4" controls width="700"></video>
+![Clicking a WSC employee to see who they're connected to in the candidate pool](presentation/gifs/team_connections.gif)
 
 **Candidate Pool - clicking a candidate opens their full explainable score breakdown**
 
