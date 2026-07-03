@@ -55,4 +55,4 @@ Requested: live link/QR + real screenshots + concrete numbers, all on one slide.
 
 ## Deliverable
 
-Output one file: `presentation/deck.html`. It should open directly in a browser with no build step and be presentable full-screen immediately.
+Output one file: `presentation/presentation.html`. It should open directly in a browser with no build step and be presentable full-screen immediately.
