@@ -128,7 +128,9 @@ Open **http://localhost:5173**. The Vite dev server proxies `/api/*` to `localho
 
 ## Presentation
 
-The full interview walkthrough - problem, approach, live demo, results, and scope - is a single self-contained file: **[presentation/presentation.html](presentation/presentation.html)**. Click to open it in a separate page/tab; no build step or server needed.
+The full interview walkthrough - problem, approach, live demo, results, and scope: **[View the presentation](https://ozshwartz.github.io/WSC-HR-Platform/presentation/presentation.html)** (opens in a new tab, hosted via GitHub Pages).
+
+If you've cloned or downloaded the repo instead, it's the same file at `presentation/presentation.html` - open it directly in a browser, no build step or server needed.
 
 ## Appendix
 
