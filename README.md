@@ -105,4 +105,37 @@ Open **http://localhost:5173**. The Vite dev server proxies `/api/*` to `localho
 - **Dashboard** (`/`) - KPIs and top candidates across all jobs
 - **Candidate Pool** (`/candidates`) - every attendee, tagged with their best-matching job; click a row for the full score breakdown + AI summary
 - **Jobs** (`/jobs`, `/jobs/:jobId`) - open roles, each with its own ranked candidate table
+- **WSC Team** (`/employees`) - employee roster with reverse mutual-connections view and deterministic warm-intro suggestions
 - **Settings** (`/settings`) - live scoring weights from `backend/config/scoring_weights.json`, and mocked integration status (prds/11-tradeoffs.md #4)
+
+## Live Demo
+
+**Opening a job posting and reviewing its ranked candidates**
+
+<video src="presentation/videos/jobs_flow.mp4" controls width="700"></video>
+
+**Clicking a WSC employee to see who they're connected to in the candidate pool**
+
+<video src="presentation/videos/team_connections.mp4" controls width="700"></video>
+
+**Candidate Pool - clicking a candidate opens their full explainable score breakdown**
+
+![Candidate Pool with a candidate's profile drawer open](presentation/screenshots/candidate-pool-drawer.png)
+
+**WSC Team - one employee's mutual connections in the candidate pool, with a warm-intro suggestion**
+
+![WSC Team page with one employee's connections expanded](presentation/screenshots/wsc-team-connections.png)
+
+## Presentation
+
+The full interview walkthrough - problem, approach, live demo, results, and scope - is a single self-contained file: **[presentation/presentation.html](presentation/presentation.html)**. Click to open it in a separate page/tab; no build step or server needed.
+
+## Appendix
+
+![ERD - Talent Intelligence Platform proposed relational schema](presentation/png/erd-diagram.png)
+
+Planning-stage schema - the core relationships this use case actually needs, not a final production design.
+
+![Corrected architecture - production path for the Talent Intelligence Platform](presentation/png/architecture-diagram.png)
+
+Infrastructure plan for the next phase - what's needed to take this from a local demo to something live and usable.
