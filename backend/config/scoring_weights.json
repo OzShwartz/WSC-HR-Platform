@@ -7,5 +7,5 @@
   "conference_relevance": 0.1,
   "education": 0.05,
   "recruiter_feedback": 0.05,
-  "_comment": "Default weights from prds/03-scoring-engine.md. Editable without touching code \u2014 an HR Manager changes candidate ranking behavior by editing this file (Settings module will expose this as a form in a later phase)."
+  "_comment": "Default weights from prds/03-scoring-engine.md. Editable without touching code - an HR Manager changes candidate ranking behavior by editing this file (Settings module will expose this as a form in a later phase)."
 }
